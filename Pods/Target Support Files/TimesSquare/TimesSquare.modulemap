@@ -1,0 +1,6 @@
+framework module TimesSquare {
+  umbrella header "TimesSquare-umbrella.h"
+
+  export *
+  module * { export * }
+}

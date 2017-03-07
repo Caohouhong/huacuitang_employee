@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CommitTiaoLiSuccessVC">
+            <connections>
+                <outlet property="backBtn" destination="kvO-tJ-6oC" id="veD-sA-SkR"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kvO-tJ-6oC">
+                    <color key="backgroundColor" red="0.90588235289999997" green="0.27058823529999998" blue="0.30196078430000001" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="Co2-dZ-03H"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                    <state key="normal" title="返回首页">
+                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="backTiaoLi:" destination="-1" eventType="touchUpInside" id="w7T-J4-t2y"/>
+                    </connections>
+                </button>
+                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yFk-MO-eer">
+                    <frame key="frameInset" width="375" height="512"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7zd-MY-oL9">
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="提交成功!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LU1-RY-M3l">
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="40" id="n9G-4a-QT9"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="35"/>
+                                    <color key="textColor" red="0.90588235289999997" green="0.27058823529999998" blue="0.30196078430000001" alpha="1" colorSpace="calibratedRGB"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="tijiao" translatesAutoresizingMaskIntoConstraints="NO" id="xxc-k6-4PD">
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="180" id="DCs-cs-wvX"/>
+                                    </constraints>
+                                </imageView>
+                            </subviews>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="trailing" secondItem="LU1-RY-M3l" secondAttribute="trailing" id="CrA-az-YMh"/>
+                                <constraint firstAttribute="bottom" secondItem="LU1-RY-M3l" secondAttribute="bottom" id="En3-0g-u0M"/>
+                                <constraint firstAttribute="width" constant="180" id="LGY-9s-zjm"/>
+                                <constraint firstItem="LU1-RY-M3l" firstAttribute="leading" secondItem="7zd-MY-oL9" secondAttribute="leading" id="Qbs-gz-1hE"/>
+                                <constraint firstItem="xxc-k6-4PD" firstAttribute="leading" secondItem="7zd-MY-oL9" secondAttribute="leading" id="Qfk-tx-JgY"/>
+                                <constraint firstAttribute="height" constant="220" id="atl-Md-SoZ"/>
+                                <constraint firstAttribute="trailing" secondItem="xxc-k6-4PD" secondAttribute="trailing" id="bys-b8-2nn"/>
+                                <constraint firstItem="xxc-k6-4PD" firstAttribute="top" secondItem="7zd-MY-oL9" secondAttribute="top" id="dme-2m-ORj"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="7zd-MY-oL9" firstAttribute="centerX" secondItem="yFk-MO-eer" secondAttribute="centerX" id="urJ-zl-lSD"/>
+                        <constraint firstItem="7zd-MY-oL9" firstAttribute="centerY" secondItem="yFk-MO-eer" secondAttribute="centerY" id="vmB-g0-00l"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="yFk-MO-eer" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="9iR-4u-MPP"/>
+                <constraint firstAttribute="trailing" secondItem="kvO-tJ-6oC" secondAttribute="trailing" constant="20" id="F1b-WR-E8H"/>
+                <constraint firstItem="yFk-MO-eer" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="5" id="aAv-HO-NzH"/>
+                <constraint firstAttribute="bottom" secondItem="yFk-MO-eer" secondAttribute="bottom" constant="150" id="fpm-sx-wGC"/>
+                <constraint firstItem="kvO-tJ-6oC" firstAttribute="top" secondItem="yFk-MO-eer" secondAttribute="bottom" constant="20" id="oOF-fb-oGV"/>
+                <constraint firstItem="kvO-tJ-6oC" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="20" id="un3-pr-Cgy"/>
+                <constraint firstAttribute="trailing" secondItem="yFk-MO-eer" secondAttribute="trailing" id="yPM-E3-v9W"/>
+            </constraints>
+            <point key="canvasLocation" x="-138.5" y="-98.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="tijiao" width="130" height="130"/>
+    </resources>
+</document>

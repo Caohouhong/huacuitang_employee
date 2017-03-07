@@ -1,0 +1,6 @@
+framework module Pods________ {
+  umbrella header "Pods-华粹堂-员工端-umbrella.h"
+
+  export *
+  module * { export * }
+}
