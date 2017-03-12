@@ -106,4 +106,47 @@
     .widthIs(50)
     .heightIs(20);
    }
+
+//预约
+- (void)setYuyueModel:(ModelHealthBooking *)yuyueModel
+{
+    _yuyueModel = yuyueModel;
+    
+    //H 测试 未完成
+    self.nameTextlabel.text = yuyueModel.employeeName;
+    self.phoneTextlabel.text = yuyueModel.mobile_phone;
+    self.addressTextlabel.text = yuyueModel.s_name;
+    
+    self.yearTextlabel.text = yuyueModel.customerAge;
+    self.sexImageView.image = ([@"1" isEqualToString:yuyueModel.sex]) ? [UIImage imageNamed:@"icon_girl"] : [UIImage imageNamed:@"icon_boy"];
+    [self.iconImageView sd_setImageWithURL:IMAGE_URL(yuyueModel.portrait) placeholderImage:[UIImage imageNamed:@"default"]];
+    
+}
+
+//调理
+- (void)setTrackModel:(ModelTrackManage *)trackModel
+{
+    _trackModel = trackModel;
+    
+    self.nameTextlabel.text = trackModel.customerName;
+    self.phoneTextlabel.text = trackModel.customerMobilePhone;
+    self.addressTextlabel.text = trackModel.shopName;
+    
+    self.yearTextlabel.text = [NSString stringWithFormat:@"%@岁",trackModel.age?trackModel.age:@"0"];
+    self.sexImageView.image = ([@"1" isEqualToString:trackModel.sex]) ? [UIImage imageNamed:@"icon_girl"] : [UIImage imageNamed:@"icon_boy"];
+    [self.iconImageView sd_setImageWithURL:IMAGE_URL(trackModel.portrait) placeholderImage:[UIImage imageNamed:@"default"]];
+}
+
+//回访
+- (void)setHuifangModel:(HuiFangModel *)huifangModel
+{
+     _huifangModel = huifangModel;
+    self.nameTextlabel.text = huifangModel.customerName;
+    self.phoneTextlabel.text = huifangModel.customerTel;
+    self.addressTextlabel.text = [ModelMember sharedMemberMySelf].shopName;
+    self.yearTextlabel.text = [NSString stringWithFormat:@"%@岁",huifangModel.customerAge?huifangModel.customerAge:@""];
+    self.sexImageView.image = ([@"1" isEqualToString:huifangModel.sex]) ? [UIImage imageNamed:@"icon_girl"] : [UIImage imageNamed:@"icon_boy"];
+    [self.iconImageView sd_setImageWithURL:IMAGE_URL(huifangModel.portrait) placeholderImage:[UIImage imageNamed:@"default"]];
+}
+
 @end

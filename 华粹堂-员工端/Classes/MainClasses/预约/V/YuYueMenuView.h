@@ -11,7 +11,7 @@
 typedef void(^DidClickDateBlick)(NSDate *startDate,NSDate*endDate);
 
 @protocol YuYueMenuViewDelegate <NSObject>
-
+@optional
 - (void)LeftMenuViewActionIndex:(NSString *)vType;
 
 @end

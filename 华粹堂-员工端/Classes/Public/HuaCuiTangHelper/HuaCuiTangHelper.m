@@ -117,6 +117,31 @@
     return dateString;
 }
 
+/**
+   NSDate转时间戳
+*/
++ (NSString *)changeDateToTimeStmp:(NSDate *)date{
+    NSTimeZone *zone = [NSTimeZone systemTimeZone];
+    NSInteger interval = [zone secondsFromGMTForDate:date];
+    NSDate *localeDate = [date dateByAddingTimeInterval:interval];
+
+    NSString *timeSp = [NSString stringWithFormat:@"%ld",(long)[localeDate timeIntervalSince1970]];
+    return timeSp;
+}
+
+/**
+   "visit_time" : "2017-01-23 09:52",转时间戳
+ */
++ (NSString *)changeTimeToTimeStmp:(NSString *)string{
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"YYYY-MM-dd HH:mm"];
+    NSDate *mDate = [dateFormatter dateFromString:string];
+    
+    NSString *timeStmp = [self changeDateToTimeStmp:mDate];
+
+    return timeStmp;
+}
 
 /*********字体处理**********/
 /**

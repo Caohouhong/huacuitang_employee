@@ -11,15 +11,20 @@
 #import "HuaCuiTangHelper.h"
 #import "AdviceTableViewCell.h"
 #import "ChhYuYueTableViewCell.h"
-
+#import "HCTConnet.h"
+#import "HealthFormModel.h"
 @interface HealthFormVC ()<UITableViewDelegate, UITableViewDataSource,NextAndLastDateViewDelegate>
 {
     int dayNum;
     NSString *mBookTime;
     NSArray *titleArray;
+    NSArray *dataArray;
+    NSString *type;
 }
 @property (nonatomic, weak) UITableView *tableView;
 @property (nonatomic, strong) NextAndLastDateView *topView;
+@property (nonatomic, strong) HealthFormModel *model;
+@property (nonatomic, copy) NSString *time;
 
 @end
 
@@ -27,9 +32,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    type = @"1";
     self.navigationItem.title = @"体检报告";
     titleArray = @[@[@"顾客姓名",@"体检项目"],@[@"报告内容"]];
     [self drawView];
+    [self requestData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -94,9 +101,9 @@
         AdviceTableViewCell *cell = [AdviceTableViewCell cellWithTableView:self.tableView];
         
         cell.titleLabel.text = titleArray[indexPath.section][indexPath.row];
-        cell.nameLabel.text = @"";
+        cell.topTextView.text = dataArray[1][indexPath.row];
         cell.timeLabel.text = @"";
-        
+        cell.nameLabel.text = @"";
         cell.topTextView.sd_layout
         .heightIs(150);
         
@@ -105,7 +112,7 @@
     }else  {
         ChhYuYueTableViewCell *cell = [ChhYuYueTableViewCell cellWithTableView:self.tableView];
         
-        cell.leftLabel.attributedText = [HuaCuiTangHelper changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@:  %@",titleArray[indexPath.section][indexPath.row],@"未知"] changeText:@"未知" andColor:COLOR_Gray];
+        cell.leftLabel.attributedText = [HuaCuiTangHelper changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@:  %@",titleArray[indexPath.section][indexPath.row],dataArray[indexPath.section][indexPath.row]] changeText:dataArray[indexPath.section][indexPath.row] andColor:COLOR_Gray];
         
         return cell;
     }
@@ -140,11 +147,15 @@
         case NextAndLastDateViewButtonTypeLast:
         {
             dayNum--;
+           type = @"1";
+
         }
             break;
         case NextAndLastDateViewButtonTypeNext:
         {
             dayNum++;
+           type = @"0";
+            
         }
             break;
     }
@@ -154,8 +165,8 @@
     
     mBookTime = [self changeDateStringStyleWith:dateString];
     //show hud
-    //    [LCProgressHUD showLoading:@"正在加载..."];
-    //    [self requestData];
+        [LCProgressHUD showLoading:@"正在加载..."];
+        [self requestData];
 }
 
 //改变时间格式
@@ -169,6 +180,33 @@
     
     return newDateStr;
 }
+#pragma mark - ====网络====
+- (void)requestData
+{
+    [LCProgressHUD showLoading:@"正在加载..."];
+    
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+  
+//    NSDictionary *dic = @{@"dateTime":mBookTime,@"flag":flag,@"customerId":self.YongHuId};
 
+    [params setValue:mBookTime forKey:@"creatTime"];
+    [params setValue:type forKey:@"type"];
+    [params setValue:self.YongHuId forKey:@"customerId"];
 
+    DLog(@"#########%@",params);
+    [HCTConnet getHealthFormVC:params success:^(id responseObject) {
+        self.model = [HealthFormModel mj_objectWithKeyValues:responseObject];
+        dataArray = @[@[[self judgeString:self.name],[self judgeString:self.model.items]],@[[self judgeString:self.model.situation]]];
+       
+        [self.tableView reloadData];
+    } successBackfailError:^(id responseObject) {
+        
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        
+    }];
+}
+- (NSString *)judgeString:(id)str{
+    NSString *result = str?str:@"";
+    return result;
+}
 @end

@@ -11,12 +11,18 @@
 #import "CheckDetailTableViewCell.h"
 #import "HuaCuiTangHelper.h"
 #import "NextAndLastDateView.h"
-
+#import "HCTConnet.h"
+#import "JumpVC.h"
 @interface ReCureDetailVC ()<UITableViewDelegate, UITableViewDataSource,NextAndLastDateViewDelegate>
 {
     int dayNum;
     NSString *mBookTime;
     NSArray *titleArray;
+    NSArray *dataArray;
+    NSArray *dataArray1;
+ 
+    
+    NSString *type;
 }
 @property (nonatomic, weak) UITableView *tableView;
 @property (nonatomic, strong) NextAndLastDateView *topView;
@@ -27,9 +33,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    type = @"1";
     self.navigationItem.title = @"复诊跟踪";
     titleArray = @[@[@"门店名称",@"顾客姓名"],@[@"客户主诉"],@[@"咨询辩证"],@[@"调理方案"],@[@"家居养生要求"],@[@"其他说明"],@[@"专家综合满意度"],@[@"方案制定人"]];
     [self drawView];
+    [self requestData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -94,12 +102,31 @@
         CheckDetailTableViewCell *cell = [CheckDetailTableViewCell cellWithTableView:self.tableView];
         
         cell.leftLabel.text = titleArray[indexPath.section][indexPath.row];
-        
+        cell.bottomLabel.text = dataArray[indexPath.section][indexPath.row];
         return cell;
     }else  {
         ChhYuYueTableViewCell *cell = [ChhYuYueTableViewCell cellWithTableView:self.tableView];
         
-        cell.leftLabel.attributedText = [HuaCuiTangHelper changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@:  %@",titleArray[indexPath.section][indexPath.row],@"未知"] changeText:@"未知" andColor:COLOR_Gray];
+//        cell.leftLabel.attributedText = [HuaCuiTangHelper changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@:  %@",titleArray[indexPath.section][indexPath.row],dataArray[indexPath.section][indexPath.row]] changeText:@"未知" andColor:COLOR_Gray];
+        DLog(@"^^^%ld,%ld",(long)indexPath.section,(long)indexPath.row);
+        if (indexPath.section == 0 ) {
+            if (indexPath.row == 0) {
+                  cell.leftLabel.attributedText = [HuaCuiTangHelper changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@:  %@",titleArray[indexPath.section][indexPath.row],[self judgeString:self.model.shopName]] changeText:self.model.shopName andColor:COLOR_Gray];
+            }else{
+                cell.leftLabel.attributedText = [HuaCuiTangHelper changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@:  %@",titleArray[indexPath.section][indexPath.row],[self judgeString:self.model.customerName]] changeText:self.model.customerName andColor:COLOR_Gray];
+            }
+        }
+        if (indexPath.section == 5) {
+            
+             cell.leftLabel.attributedText = [HuaCuiTangHelper changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@:  %@",titleArray[indexPath.section][indexPath.row],[self judgeString:self.model.other_description]] changeText:self.model.other_description andColor:COLOR_Gray];
+            
+        }
+        if (indexPath.section == 6) {
+            cell.leftLabel.attributedText = [HuaCuiTangHelper changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@:  %@",titleArray[indexPath.section][indexPath.row],[self judgeString:self.model.con_eva]] changeText:self.model.con_eva andColor:COLOR_Gray];
+        }
+        if (indexPath.section == 7) {
+            cell.leftLabel.attributedText = [HuaCuiTangHelper changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@:  %@",titleArray[indexPath.section][indexPath.row],[self judgeString:self.model.makers]] changeText:self.model.makers andColor:COLOR_Gray];
+        }
         
         return cell;
     }
@@ -129,9 +156,34 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
-    
-    
+    if (indexPath.section == 1) {
+        JumpVC *vc = [[JumpVC alloc] init];
+        vc.titlel =@"客户主诉";
+        vc.content =[self judgeString:self.model.customers_complained];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    if (indexPath.section == 2) {
+        JumpVC *vc = [[JumpVC alloc] init];
+        vc.titlel =@"咨询辩证";
+        vc.content =[self judgeString:self.model.dialectics_program];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    if (indexPath.section == 3) {
+        JumpVC *vc = [[JumpVC alloc] init];
+        vc.titlel =@"调理方案";
+        vc.content =[self judgeString:self.model.d_program_detail];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    if (indexPath.section == 4) {
+        JumpVC *vc = [[JumpVC alloc] init];
+        vc.titlel =@"家居养生要求";
+        vc.content =[self judgeString:self.model.home_health_req];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
 #pragma mark NextAndLastDateViewDelegate 上一天下一天
@@ -141,11 +193,13 @@
         case NextAndLastDateViewButtonTypeLast:
         {
             dayNum--;
+            type = @"1";
         }
             break;
         case NextAndLastDateViewButtonTypeNext:
         {
             dayNum++;
+            type = @"0";
         }
             break;
     }
@@ -155,8 +209,8 @@
     
     mBookTime = [self changeDateStringStyleWith:dateString];
     //show hud
-    //    [LCProgressHUD showLoading:@"正在加载..."];
-    //    [self requestData];
+        [LCProgressHUD showLoading:@"正在加载..."];
+        [self requestData];
 }
 
 //改变时间格式
@@ -170,6 +224,35 @@
     
     return newDateStr;
 }
+#pragma mark - ====网络====
+- (void)requestData
+{
+    [LCProgressHUD showLoading:@"正在加载..."];
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+    [params setValue:self.YongHuId forKey:@"c_id"];
+    [params setValue:type forKey:@"type"];
+    [params setValue:@"0" forKey:@"trackTyp"];
+    [params setValue:mBookTime forKey:@"dataTime"];
+    DLog(@"$$$$$$$$$$$$$$$$$$$%@",params);
+    
+    [HCTConnet getHighTechDetailVC:params success:^(id responseObject) {
+        self.model = [HighTechDetailModel mj_objectWithKeyValues:responseObject];
+ 
+        
+        dataArray = @[@[[self judgeString:self.model.shopName],[self judgeString:self.model.customerName]],@[[self judgeString:self.model.customers_complained],[self judgeString:self.model.dialectics_program]],@[[self judgeString:self.model.d_program_detail]],@[[self judgeString:self.model.home_health_req]],@[[self judgeString:self.model.other_description]],@[@""],@[[self judgeString:self.model.makers]]];
+        dataArray1 = @[@[@"",[self judgeString:self.model.customerName]],@[[self judgeString:self.model.other_description]],@[@""],@[[self judgeString:self.model.makers]]];
+        [self.tableView reloadData];
+    } successBackfailError:^(id responseObject) {
+        
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        
+    }];
+    
+}
 
 
+- (NSString *)judgeString:(id)str{
+    NSString *result = str?str:@"";
+    return result;
+}
 @end

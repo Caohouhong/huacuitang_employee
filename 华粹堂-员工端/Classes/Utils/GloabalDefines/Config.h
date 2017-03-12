@@ -10,12 +10,12 @@
 #define Config_h
 
 
-#define IP                         @"http://192.168.1.113:8080/zmapiprj" //本地测试
-
-//#define IP                         @"http://192.168.1.132:8080"
+//#define IP                         @"http://115.28.148.32/App" //外网测试
 
 
-//#define IP                         @"http://luwl.s1.natapp.cc" //生产
+//#define IP                         @"http://192.168.1.167:8080/zmapiprj"
+
+#define IP                         @"http://luwl.s1.natapp.cc" //个人调试
 
 //#define SERVER_URL                 [NSString stringWithFormat:@"%@%@",IP,@"/zmapiprj/webService/"]
 #define SERVER_URL                 [NSString stringWithFormat:@"%@%@",IP,@"/webService/"]

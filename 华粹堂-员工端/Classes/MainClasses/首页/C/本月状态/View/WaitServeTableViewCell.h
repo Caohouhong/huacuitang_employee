@@ -11,9 +11,13 @@
 #import "ModelTrackManage.h"
 #import "HuiFangModel.h"
 
+typedef void(^WaitServeTableViewCellBlock)();
+
 @interface WaitServeTableViewCell : UITableViewCell
 
 @property (nonatomic, strong) UILabel *rightBottomLabel; //状态
+
+@property (nonatomic, strong) WaitServeTableViewCellBlock block;
 
 @property (nonatomic, strong) ServeModel *model;
 

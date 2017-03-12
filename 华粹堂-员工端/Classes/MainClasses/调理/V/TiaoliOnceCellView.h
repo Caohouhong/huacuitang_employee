@@ -11,5 +11,6 @@
 @interface TiaoliOnceCellView : UIView
 @property (nonatomic, strong) UILabel *leftNameLabel;
 @property (nonatomic, strong) UIButton *rightButton;
+@property (nonatomic, strong) UIButton *fullButton;
 @property (nonatomic, strong) UILabel *rightLabel;
 @end

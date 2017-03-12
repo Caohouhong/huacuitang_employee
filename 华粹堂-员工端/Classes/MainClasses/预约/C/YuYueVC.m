@@ -59,6 +59,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"预约记录";
+    self.pageNo = 1;
     self.view.backgroundColor = COLOR_BackgroundColor;
     
     UIBarButtonItem *rightBar = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"calendar"] style:UIBarButtonItemStylePlain target:self action:@selector(didClickRightBar)];
@@ -147,29 +148,40 @@
         @strongify(self);
         if (startDate) {
             self.startTime = [NSDate getZeroPointTimeIntervalWithDate:startDate];
-            self.dateStr1 = [NSDate dateStringWithTimeDate:startDate dateFormat:@"yyyy-MM-dd"];
+            self.dateStr1 = [NSDate dateStringWithTimeDate:startDate dateFormat:@"yyyy年MM日dd"];
         }
         
-        if (endDate) {
-            self.endTime = [NSDate getTwentyFourPointTimeIntervalWithDate:endDate];
-            self.dateStr2 = [NSDate dateStringWithTimeDate:endDate dateFormat:@"yyyy-MM-dd"];
-        }
+        self.topView.dataLabel.text = self.dateStr1;
         
-
-        if([self.dateStr1 isEqualToString:self.dateStr2]) {
-//            self.timeLabel.text = [NSString stringWithFormat:@"预约时间: %@",self.dateStr1];
-        }else {
-//            self.timeLabel.text = [NSString stringWithFormat:@"预约时间: %@~%@",self.dateStr1,self.dateStr2];
-        }
-        NSDate *currentDate = [NSDate date];//获取当前时间，日期
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"YYYY-MM-dd"];
-        NSString *dateString = [dateFormatter stringFromDate:currentDate];
-        if(!self.dateStr1.length) {
+        mBookTime = [self changeDateStringStyleWith:self.dateStr1];
+        
+        //show hud
+        [LCProgressHUD showLoading:@"正在加载..."];
+        [self requestData];
+        
+//        if (endDate) {
+//            self.endTime = [NSDate getTwentyFourPointTimeIntervalWithDate:endDate];
+//            self.dateStr2 = [NSDate dateStringWithTimeDate:endDate dateFormat:@"yyyy-MM-dd"];
+//        }
+//        
+//
+//        if([self.dateStr1 isEqualToString:self.dateStr2]) {
+////            self.timeLabel.text = [NSString stringWithFormat:@"预约时间: %@",self.dateStr1];
+//        }else {
+////            self.timeLabel.text = [NSString stringWithFormat:@"预约时间: %@~%@",self.dateStr1,self.dateStr2];
+//        }
+//        NSDate *currentDate = [NSDate date];//获取当前时间，日期
+//        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+//        [dateFormatter setDateFormat:@"YYYY-MM-dd"];
+//        NSString *dateString = [dateFormatter stringFromDate:currentDate];
+//        if(!self.dateStr1.length) {
 //            self.timeLabel.text = [NSString stringWithFormat:@"预约时间: %@",dateString];
-        }
+//        }
        
 //        [self requestDataWithStartTime:self.startTime endTime:self.endTime];
+        
+        
+        
     };
 }
 
@@ -231,6 +243,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     WaitServeTableViewCell *cell = [WaitServeTableViewCell cellWithTableView:self.tableView];
+    WEAK(weakSelf);
+    cell.block = ^{
+        ServeModel *model = self.dataArray[indexPath.row];
+        [weakSelf sendMessageToSomeone:model.mobile_phone];
+    };
     
     cell.model = self.dataArray[indexPath.row];
     
@@ -245,13 +262,12 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 8;
+    return 0.01;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ModelHealthBooking *model  = self.dataArray[indexPath.section];
-    
     ChhYuYueDetailVC *vc = [[ChhYuYueDetailVC alloc] init];
     vc.hidesBottomBarWhenPushed = YES;
     vc.healthbookingId = model.sid;
@@ -298,6 +314,28 @@
     } failure:^(NSURLSessionDataTask *operation, NSError *error) {
         
     }];
+}
+
+//到店提醒
+- (void)sendMessageToSomeone:(NSString *)phoneNum{
+    [LCProgressHUD showLoading:@"正在提醒..."];
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+     [params setValue:[ModelMember sharedMemberMySelf].memberId forKey:@"memberId"];
+    [params setValue:@"" forKey:@"mobilePhone"];
+    [params setValue:@(11) forKey:@"operation"]; //11-到店提醒
+    [params setValue:@(1) forKey:@"codeType"];
+    
+    [HCTConnet getOtherSendAuthCode:params success:^(id responseObject) {
+        
+        [LCProgressHUD showSuccess:@"提醒成功"];
+        [self requestData];
+        
+    } successBackfailError:^(id responseObject) {
+        
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        
+    }];
+
 }
 
 //刷新
@@ -349,69 +387,4 @@
     
     return newDateStr;
 }
-
-/**
-#pragma mark -
-#pragma mark ================= 网络 =================
-- (void)requestDataWithStartTime:(long)startTime endTime:(long)endTime
-{
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    [params setValue:[ModelMember sharedMemberMySelf].memberId forKey:@"employeeId"];
-    [params setValue:@(startTime) forKey:@"startTime"];
-    [params setValue:@(endTime) forKey:@"endTime"];
-    [params setValue:@(self.pageNo) forKey:@"pageNo"];
-    [params setValue:@(20) forKey:@"pageSize"];
-    
-    if (self.menu.nameSearchTextfield.text.length)
-    {
-        [params setValue:self.menu.nameSearchTextfield.text forKey:@"customerNameLike"];
-    }
-    
-    [[LQHTTPSessionManager sharedManager] LQPost:@"healthBooking/listHealthBookings" parameters:params showTips:@"正在加载..." success:^(id responseObject) {
-        
-        NSArray *array =  [ModelHealthBooking mj_objectArrayWithKeyValuesArray:[responseObject valueForKey:@"data"]];
-        
-        if (self.pageNo == 1)
-        {
-            self.dataArray = [NSMutableArray arrayWithArray:array];
-        }
-        else
-        {
-            [self.dataArray addObjectsFromArray:array];
-        }
-        
-        [self.tableView reloadData];
-        [self.tableView.mj_header endRefreshing];
-        [self.tableView.mj_footer endRefreshing];
-        
-        if (array.count < 20)
-        {
-            [self.tableView.mj_footer endRefreshingWithNoMoreData];
-        }
-        
-    } successBackfailError:^(id responseObject) {
-        self.dataArray = [NSMutableArray array];
-        [self.tableView reloadData];
-        [self.tableView.mj_header endRefreshing];
-        [self.tableView.mj_footer endRefreshing];
-    } failure:^(NSError *error) {
-        self.dataArray = [NSMutableArray array];
-        [self.tableView reloadData];
-        [self.tableView.mj_header endRefreshing];
-        [self.tableView.mj_footer endRefreshing];
-    }];
-}
-
- - (void)headerRefersh
- {
- self.pageNo = 1;
- [self requestDataWithStartTime:self.startTime endTime:self.endTime];
- }
- 
- - (void)footerRefersh
- {
- self.pageNo ++;
- [self requestDataWithStartTime:self.startTime endTime:self.endTime];
- }
- */
 @end

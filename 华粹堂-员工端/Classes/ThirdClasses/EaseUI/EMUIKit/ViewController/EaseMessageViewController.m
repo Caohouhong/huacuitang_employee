@@ -98,9 +98,9 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideImagePicker) name:@"hideImagePicker" object:nil];
     
-    UIBarButtonItem *barBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"telephone"] style:UIBarButtonItemStylePlain target:self action:@selector(callPhone)];
-    self.navigationItem.rightBarButtonItem = barBtn;
-    barBtn.tintColor = HEXCOLOR(0xe54751);
+//    UIBarButtonItem *barBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"telephone"] style:UIBarButtonItemStylePlain target:self action:@selector(callPhone)];
+//    self.navigationItem.rightBarButtonItem = barBtn;
+//    barBtn.tintColor = HEXCOLOR(0xe54751);
     
     //Initialization
     CGFloat chatbarHeight = [EaseChatToolbar defaultHeight];

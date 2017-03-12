@@ -54,13 +54,13 @@
     UIView *dividerLine3 = [[UIView alloc] init];
     dividerLine3.backgroundColor = COLOR_LineViewColor;
     
-    UIButton *adviceBtn0 = [self creatBtnWithTitle:@"不选" andTag:20000];
-    UIButton *adviceBtn1 = [self creatBtnWithTitle:@"差" andTag:20001];
-    UIButton *adviceBtn2 = [self creatBtnWithTitle:@"一般" andTag:20002];
-    UIButton *adviceBtn3 = [self creatBtnWithTitle:@"较好" andTag:20003];
-    UIButton *adviceBtn4 = [self creatBtnWithTitle:@"好" andTag:20004];
+    _adviceBtn0 = [self creatBtnWithTitle:@"不选" andTag:20000];
+    _adviceBtn1 = [self creatBtnWithTitle:@"差" andTag:20001];
+    _adviceBtn2 = [self creatBtnWithTitle:@"一般" andTag:20002];
+    _adviceBtn3 = [self creatBtnWithTitle:@"较好" andTag:20003];
+    _adviceBtn4 = [self creatBtnWithTitle:@"好" andTag:20004];
     
-    [self.contentView sd_addSubviews:@[_titleLabel,_rightLabel,adviceBtn0,adviceBtn1,adviceBtn2,adviceBtn3,adviceBtn4,dividerLine1,dividerLine2,dividerLine3]];
+    [self.contentView sd_addSubviews:@[_titleLabel,_rightLabel,_adviceBtn0,_adviceBtn1,_adviceBtn2,_adviceBtn3,_adviceBtn4,dividerLine1,dividerLine2,dividerLine3]];
     
     _titleLabel.sd_layout
     .leftEqualToView(self.contentView).offset(15)
@@ -92,35 +92,35 @@
     .widthRatioToView(self.contentView,1)
     .heightIs(1);
     
-    adviceBtn0.sd_layout
+    _adviceBtn0.sd_layout
     .leftEqualToView(self.contentView).offset(15)
     .topSpaceToView(_titleLabel,10)
     .widthIs((ScreenWidth - 50)/5)
     .heightIs(30);
     
-    adviceBtn1.sd_layout
-    .leftSpaceToView(adviceBtn0,5)
-    .topEqualToView(adviceBtn0)
-    .widthRatioToView(adviceBtn0,1)
-    .heightRatioToView(adviceBtn0,1);
+    _adviceBtn1.sd_layout
+    .leftSpaceToView(_adviceBtn0,5)
+    .topEqualToView(_adviceBtn0)
+    .widthRatioToView(_adviceBtn0,1)
+    .heightRatioToView(_adviceBtn0,1);
     
-    adviceBtn2.sd_layout
-    .leftSpaceToView(adviceBtn1,5)
-    .topEqualToView(adviceBtn0)
-    .widthRatioToView(adviceBtn0,1)
-    .heightRatioToView(adviceBtn0,1);
+    _adviceBtn2.sd_layout
+    .leftSpaceToView(_adviceBtn1,5)
+    .topEqualToView(_adviceBtn0)
+    .widthRatioToView(_adviceBtn0,1)
+    .heightRatioToView(_adviceBtn0,1);
     
-    adviceBtn3.sd_layout
-    .leftSpaceToView(adviceBtn2,5)
-    .topEqualToView(adviceBtn0)
-    .widthRatioToView(adviceBtn0,1)
-    .heightRatioToView(adviceBtn0,1);
+    _adviceBtn3.sd_layout
+    .leftSpaceToView(_adviceBtn2,5)
+    .topEqualToView(_adviceBtn0)
+    .widthRatioToView(_adviceBtn0,1)
+    .heightRatioToView(_adviceBtn0,1);
     
-    adviceBtn4.sd_layout
-    .leftSpaceToView(adviceBtn3,5)
-    .topEqualToView(adviceBtn0)
-    .widthRatioToView(adviceBtn0,1)
-    .heightRatioToView(adviceBtn0,1);
+    _adviceBtn4.sd_layout
+    .leftSpaceToView(_adviceBtn3,5)
+    .topEqualToView(_adviceBtn0)
+    .widthRatioToView(_adviceBtn0,1)
+    .heightRatioToView(_adviceBtn0,1);
 
     
 }
@@ -136,15 +136,20 @@
     selectBtn.titleLabel.font = SYSTEM_FONT_(15);
     [selectBtn setTitle:title forState:UIControlStateNormal];
     [selectBtn setTitleColor:COLOR_Gray forState:UIControlStateNormal];
-    [selectBtn addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+//    [selectBtn addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
     return selectBtn;
 }
 
 - (void)buttonAction:(UIButton *)btn
 {
+    
+    
+   
+    
     btn.layer.borderColor = COLOR_Text_Blue.CGColor;
     [btn setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
     [btn setBackgroundColor:COLOR_BG_DARK_BLUE];
+
 }
 
 

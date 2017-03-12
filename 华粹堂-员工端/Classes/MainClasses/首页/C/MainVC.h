@@ -10,5 +10,4 @@
 
 @interface MainVC : MainBaseViewController
 
-
 @end

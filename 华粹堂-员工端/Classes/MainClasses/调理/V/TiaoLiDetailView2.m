@@ -8,6 +8,12 @@
 
 #import "TiaoLiDetailView2.h"
 #import "TiaoliOnceCellView.h"
+@interface TiaoLiDetailView2 (){
+    
+    NSString *LiLiaoStr;
+    NSString *feedBackStr;
+}
+@end
 
 @implementation TiaoLiDetailView2
 
@@ -162,15 +168,89 @@
     selectBtn.titleLabel.font = SYSTEM_FONT_(15);
     [selectBtn setTitle:title forState:UIControlStateNormal];
     [selectBtn setTitleColor:COLOR_Gray forState:UIControlStateNormal];
+    [selectBtn setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateSelected];
     [selectBtn addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
     return selectBtn;
 }
 
 - (void)buttonAction:(UIButton *)btn
 {
-    btn.layer.borderColor = COLOR_Text_Blue.CGColor;
-    [btn setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
-    [btn setBackgroundColor:COLOR_BG_DARK_BLUE];
+    
+    if (btn.tag < 15000){ //第一组
+    
+      for(int i = 0; i < 5; i ++){
+        if (btn.tag == 10000+i){
+            btn.selected = YES;
+            btn.layer.borderColor = COLOR_Text_Blue.CGColor;
+            [btn setBackgroundColor:COLOR_BG_DARK_BLUE];
+            continue;//结束本次循环
+        }
+          UIButton *button = (UIButton *)[self viewWithTag:10000 + i];
+          button.selected = NO;
+          button.layer.borderColor = COLOR_LightGray.CGColor;
+          [button setBackgroundColor:[UIColor whiteColor]];
+    }
+        
+      
+        
+    }else { //第二组
+        
+        for(int i = 0; i < 4; i ++){
+            if (btn.tag == 20000+i){
+                btn.selected = YES;
+                btn.layer.borderColor = COLOR_Text_Blue.CGColor;
+                [btn setBackgroundColor:COLOR_BG_DARK_BLUE];
+                continue;//结束本次循环
+            }
+            UIButton *button = (UIButton *)[self viewWithTag:20000 + i];
+            button.selected = NO;
+            button.layer.borderColor = COLOR_LightGray.CGColor;
+            [button setBackgroundColor:[UIColor whiteColor]];
+      }
+   }
+    
+    [self changeLiLiaoSelectWithTag:(int)btn.tag];
+    
+    if (self.selectBlock){
+        self.selectBlock(LiLiaoStr,feedBackStr);
+    }
+}
+//到店理疗配合（-100,0,60,100整数字）对应字符串   null：不选  -100：较差  0：一般  60：较好100：好
+
+//客户综合反馈（1-4整数） 1：不太满意 2：一般 3：较满意 4：很满意
+- (void)changeLiLiaoSelectWithTag:(int)tag{
+
+    switch (tag) {
+        case 10000:
+            LiLiaoStr = nil;
+            break;
+        case 10001:
+            LiLiaoStr = @"-100";
+            break;
+        case 10002:
+            LiLiaoStr = @"0";
+            break;
+        case 10003:
+            LiLiaoStr = @"60";
+            break;
+        case 10004:
+            LiLiaoStr = @"-100";
+            break;
+        case 20000:
+            feedBackStr = @"-100";
+            break;
+        case 20001:
+            feedBackStr = @"-100";
+            break;
+        case 20002:
+            feedBackStr = @"-100";
+            break;
+        case 20003:
+            feedBackStr = @"-100";
+            break;
+        default:
+            break;
+    }
 }
 
 @end

@@ -101,4 +101,9 @@
 #define kDateTime                     @"kDateTime"
 #define kController                   @"kController"
 
+
+//版本号(发布新版本时记得更改)
+#define VERSION_CODE                  @"V1.0.0"
+#define VERSION_BUILD                 @"100"
+
 #endif

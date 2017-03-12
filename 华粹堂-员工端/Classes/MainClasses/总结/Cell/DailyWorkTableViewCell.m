@@ -55,9 +55,9 @@
     _centerLabel.text = @"0";
     [self.contentView addSubview:_centerLabel];
     
-    UIView *verLine = [[UIView alloc] init];
-    verLine.backgroundColor = backviewColor;
-    [self.contentView addSubview:verLine];
+//    UIView *verLine = [[UIView alloc] init];
+//    verLine.backgroundColor = backviewColor;
+//    [self.contentView addSubview:verLine];
     
     UIView *dividerLine = [[UIView alloc] init];
     dividerLine.backgroundColor = backviewColor;
@@ -81,11 +81,11 @@
     .widthIs(ScreenWidth/3 - 10)
     .heightRatioToView(self.contentView,1);
     
-    verLine.sd_layout
-    .leftEqualToView(_rightLabel).offset(10)
-    .topEqualToView(self.contentView).offset(5)
-    .widthIs(1)
-    .heightIs(30);
+//    verLine.sd_layout
+//    .leftEqualToView(_rightLabel).offset(10)
+//    .topEqualToView(self.contentView).offset(5)
+//    .widthIs(1)
+//    .heightIs(30);
     
     dividerLine.sd_layout
     .leftEqualToView(self.contentView)

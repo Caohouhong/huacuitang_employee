@@ -13,8 +13,6 @@
 #import "NewsListViewController.h"
 #import "AppDelegate.h"
 
-
-
 //#import "EaseConversationModel.h"
 //#import "EaseConversationCell.h"
 //#import "EaseMob.h"
@@ -429,7 +427,6 @@
     if ([self.showDataArray[indexPath.row] isKindOfClass:[ModelMessage class]])
     {
         ModelMessage *model = self.showDataArray[indexPath.row];
-        
         NewsListViewController *vc = [[NewsListViewController alloc] init];
         vc.groupType = model.groupType;
         [self.navigationController pushViewController:vc animated:YES];

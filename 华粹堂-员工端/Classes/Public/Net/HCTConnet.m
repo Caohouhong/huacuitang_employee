@@ -11,6 +11,21 @@
 
 @implementation HCTConnet
 
+//1.0首页信息
++(void)getHomeEmployeePageInfo:(NSMutableDictionary *) params success:(void (^)(id responseObject))success successBackfailError:(void (^)(id responseObject))successBackfailError failure:(void (^)(NSURLSessionDataTask *operation, NSError *error))failure
+{
+    Connect *con=[Connect sharedInstance];
+    [con doTestPostNetWorkWithUrl:HOME_GET_EMPLOY_HOME_PAGE_INFO parameters:params success:^(id responseObject) {
+        success(responseObject);
+    } successBackfailError:^(id responseObject) {
+        successBackfailError(responseObject);
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        failure(operation,error);
+    }];
+    
+}
+
+
 //1.1本月已（待）服务
 +(void)getHomeMonthServe:(NSMutableDictionary *) params success:(void (^)(id responseObject))success successBackfailError:(void (^)(id responseObject))successBackfailError failure:(void (^)(NSURLSessionDataTask *operation, NSError *error))failure
 {
@@ -220,6 +235,112 @@
     
 }
 
+//1.15获取家居养生方案和调理方案
++(void)getHomeProDetailAndHomeHealth:(NSMutableDictionary *) params success:(void (^)(id responseObject))success successBackfailError:(void (^)(id responseObject))successBackfailError failure:(void (^)(NSURLSessionDataTask *operation, NSError *error))failure
+{
+    Connect *con=[Connect sharedInstance];
+    
+    [con doTestPostNetWorkWithUrl:HOME_GET_PRODETAIL_HOME_HEALTH parameters:params success:^(id responseObject) {
+        success(responseObject);
+    } successBackfailError:^(id responseObject) {
+        successBackfailError(responseObject);
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        failure(operation,error);
+    }];
+    
+}
+
+//1.16顾客_添加顾客标签
++(void)getHomeAddCustomerTagV2:(NSMutableDictionary *) params success:(void (^)(id responseObject))success successBackfailError:(void (^)(id responseObject))successBackfailError failure:(void (^)(NSURLSessionDataTask *operation, NSError *error))failure
+{
+    Connect *con=[Connect sharedInstance];
+    
+    [con doTestPostNetWorkWithUrl:HOME_ADD_CUSTOMER_TAG_V2 parameters:params success:^(id responseObject) {
+        success(responseObject);
+    } successBackfailError:^(id responseObject) {
+        successBackfailError(responseObject);
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        failure(operation,error);
+    }];
+    
+}
+
+//1.17提交调理
++(void)getHomeSubmitTrackManagerV2:(NSMutableDictionary *) params success:(void (^)(id responseObject))success successBackfailError:(void (^)(id responseObject))successBackfailError failure:(void (^)(NSURLSessionDataTask *operation, NSError *error))failure
+{
+    Connect *con=[Connect sharedInstance];
+    
+    [con doTestPostNetWorkWithUrl:HOME_SUBMIT_TRACK_MANAGER_V2 parameters:params success:^(id responseObject) {
+        success(responseObject);
+    } successBackfailError:^(id responseObject) {
+        successBackfailError(responseObject);
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        failure(operation,error);
+    }];
+    
+}
+
+//1.18获取调理详情
++(void)getHomeTrackManagerV2:(NSMutableDictionary *) params success:(void (^)(id responseObject))success successBackfailError:(void (^)(id responseObject))successBackfailError failure:(void (^)(NSURLSessionDataTask *operation, NSError *error))failure
+{
+    Connect *con=[Connect sharedInstance];
+    
+    [con doTestPostNetWorkWithUrl:HOME_GET_TRACK_MANAGE_V2 parameters:params success:^(id responseObject) {
+        success(responseObject);
+    } successBackfailError:^(id responseObject) {
+        successBackfailError(responseObject);
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        failure(operation,error);
+    }];
+    
+}
+
+//1.19回访编辑提交
++(void)getHomeModifyTelVisit:(NSMutableDictionary *) params success:(void (^)(id responseObject))success successBackfailError:(void (^)(id responseObject))successBackfailError failure:(void (^)(NSURLSessionDataTask *operation, NSError *error))failure
+{
+    Connect *con=[Connect sharedInstance];
+    
+    [con doTestPostNetWorkWithUrl:HOME_GET_MODIFY_TEL_VISIT parameters:params success:^(id responseObject) {
+        success(responseObject);
+    } successBackfailError:^(id responseObject) {
+        successBackfailError(responseObject);
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        failure(operation,error);
+    }];
+    
+}
+
+//1.20添加回访信息
++(void)getHomeAddTelVisit:(NSMutableDictionary *) params success:(void (^)(id responseObject))success successBackfailError:(void (^)(id responseObject))successBackfailError failure:(void (^)(NSURLSessionDataTask *operation, NSError *error))failure
+{
+    Connect *con=[Connect sharedInstance];
+    
+    [con doTestPostNetWorkWithUrl:HOME_GET_ADD_TEL_VISIT parameters:params success:^(id responseObject) {
+        success(responseObject);
+    } successBackfailError:^(id responseObject) {
+        successBackfailError(responseObject);
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        failure(operation,error);
+    }];
+    
+}
+
+//1.21获得回访详情
++(void)getHomeTelVisit:(NSMutableDictionary *) params success:(void (^)(id responseObject))success successBackfailError:(void (^)(id responseObject))successBackfailError failure:(void (^)(NSURLSessionDataTask *operation, NSError *error))failure
+{
+    Connect *con=[Connect sharedInstance];
+    
+    [con doTestPostNetWorkWithUrl:HOME_GET_TEL_VISIT parameters:params success:^(id responseObject) {
+        success(responseObject);
+    } successBackfailError:^(id responseObject) {
+        successBackfailError(responseObject);
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        failure(operation,error);
+    }];
+    
+}
+
+
 
 /******************2.顾客详情******************/
 // 2.1顾客列表页
@@ -316,4 +437,136 @@
     }];
     
 }
+// 2.8调理备忘
++(void)getNurseHealthVC:(NSMutableDictionary *) params success:(void (^)(id responseObject))success successBackfailError:(void (^)(id responseObject))successBackfailError failure:(void (^)(NSURLSessionDataTask *operation, NSError *error))failure{
+    
+    Connect *con=[Connect sharedInstance];
+    
+    [con doTestPostNetWorkWithUrl:TRACK_FIRSTTRACK parameters:params success:^(id responseObject) {
+        success(responseObject);
+    } successBackfailError:^(id responseObject) {
+        successBackfailError(responseObject);
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        failure(operation,error);
+    }];
+    
+}
+// 2.9体检报告
++(void)getHealthFormVC:(NSMutableDictionary *) params success:(void (^)(id responseObject))success successBackfailError:(void (^)(id responseObject))successBackfailError failure:(void (^)(NSURLSessionDataTask *operation, NSError *error))failure{
+    
+    
+    Connect *con=[Connect sharedInstance];
+    
+    [con doTestPostNetWorkWithUrl:CUSTOMER_TIJIAN parameters:params success:^(id responseObject) {
+        success(responseObject);
+    } successBackfailError:^(id responseObject) {
+        successBackfailError(responseObject);
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        failure(operation,error);
+    }];
+ 
+}
+// 2.10复查跟踪
++(void)getHighTechDetailVC:(NSMutableDictionary *) params success:(void (^)(id responseObject))success successBackfailError:(void (^)(id responseObject))successBackfailError failure:(void (^)(NSURLSessionDataTask *operation, NSError *error))failure{
+    
+    Connect *con=[Connect sharedInstance];
+    
+    [con doTestPostNetWorkWithUrl:TRACK_FOR parameters:params success:^(id responseObject) {
+        success(responseObject);
+    } successBackfailError:^(id responseObject) {
+        successBackfailError(responseObject);
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        failure(operation,error);
+    }];
+    
+}
+// 2.11高科技跟踪
++(void)getHighTechD2:(NSMutableDictionary *) params success:(void (^)(id responseObject))success successBackfailError:(void (^)(id responseObject))successBackfailError failure:(void (^)(NSURLSessionDataTask *operation, NSError *error))failure{
+    Connect *con=[Connect sharedInstance];
+    
+    [con doTestPostNetWorkWithUrl:TRACK_FORDOCTOR parameters:params success:^(id responseObject) {
+        success(responseObject);
+    } successBackfailError:^(id responseObject) {
+        successBackfailError(responseObject);
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        failure(operation,error);
+    }];
+    
+}
+// 2.12月度计划
++(void)getMonthDetailVC:(NSMutableDictionary *) params success:(void (^)(id responseObject))success successBackfailError:(void (^)(id responseObject))successBackfailError failure:(void (^)(NSURLSessionDataTask *operation, NSError *error))failure{
+    
+    Connect *con=[Connect sharedInstance];
+    
+    [con doTestPostNetWorkWithUrl:EMPLOYEE_FOR parameters:params success:^(id responseObject) {
+        success(responseObject);
+    } successBackfailError:^(id responseObject) {
+        successBackfailError(responseObject);
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        failure(operation,error);
+    }];
+    
+}
+// 2.13回访
++(void)getReturnVisitVC:(NSMutableDictionary *) params success:(void (^)(id responseObject))success successBackfailError:(void (^)(id responseObject))successBackfailError failure:(void (^)(NSURLSessionDataTask *operation, NSError *error))failure{
+    
+    
+    Connect *con=[Connect sharedInstance];
+    
+    [con doTestPostNetWorkWithUrl:TELEPHONE parameters:params success:^(id responseObject) {
+        success(responseObject);
+    } successBackfailError:^(id responseObject) {
+        successBackfailError(responseObject);
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        failure(operation,error);
+    }];
+    
+}
+
+//2.14 私密生活话题
++(void)getSecretTopicVC:(NSMutableDictionary *) params success:(void (^)(id responseObject))success successBackfailError:(void (^)(id responseObject))successBackfailError failure:(void (^)(NSURLSessionDataTask *operation, NSError *error))failure{
+    
+    Connect *con=[Connect sharedInstance];
+    
+    [con doTestPostNetWorkWithUrl:TOMERTAGS parameters:params success:^(id responseObject) {
+        success(responseObject);
+    } successBackfailError:^(id responseObject) {
+        successBackfailError(responseObject);
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        failure(operation,error);
+    }];
+}
+
+/*****************3.其它（other）******************/
+//3.1 版本更新
++(void)getOtherIsUpdate:(NSMutableDictionary *) params success:(void (^)(id responseObject))success successBackfailError:(void (^)(id responseObject))successBackfailError failure:(void (^)(NSURLSessionDataTask *operation, NSError *error))failure{
+    
+    Connect *con=[Connect sharedInstance];
+    
+    [con doTestPostNetWorkWithUrl:O_IS_UPDATE_URL parameters:params success:^(id responseObject) {
+        success(responseObject);
+    } successBackfailError:^(id responseObject) {
+        successBackfailError(responseObject);
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        failure(operation,error);
+    }];
+    
+}
+
+//3.2 短信提醒
++(void)getOtherSendAuthCode:(NSMutableDictionary *) params success:(void (^)(id responseObject))success successBackfailError:(void (^)(id responseObject))successBackfailError failure:(void (^)(NSURLSessionDataTask *operation, NSError *error))failure{
+    
+    Connect *con=[Connect sharedInstance];
+    
+    [con doTestPostNetWorkWithUrl:O_IS_SEND_AUTH_CODE parameters:params success:^(id responseObject) {
+        success(responseObject);
+    } successBackfailError:^(id responseObject) {
+        successBackfailError(responseObject);
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        failure(operation,error);
+    }];
+    
+}
+
+
 @end

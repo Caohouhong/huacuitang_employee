@@ -7,6 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ModelHealthBooking.h"
+#import "ModelTrackManage.h"
+#import "HuiFangModel.h"
 
 @interface ChhYuYueDetailHeaderView : UIView
 
@@ -16,5 +19,11 @@
 @property (nonatomic, strong) UILabel *addressTextlabel; //地点
 @property (nonatomic, strong) UIImageView *sexImageView; //性别
 @property (nonatomic, strong) UILabel *yearTextlabel; //年龄
+
+@property (nonatomic, strong) ModelHealthBooking *yuyueModel;//预约
+
+@property (nonatomic, strong) ModelTrackManage *trackModel;//调理
+
+@property (nonatomic, strong) HuiFangModel *huifangModel;//回访
 
 @end

@@ -7,7 +7,8 @@
 //
 
 #import "ChildBaseViewController.h"
-
+#import "AccountModel.h"
 @interface AccountInfoDetailVC : ChildBaseViewController
-
+@property(nonatomic ,strong) AccountModel *model;
+@property(nonatomic ,copy) NSString *YongHuId;
 @end

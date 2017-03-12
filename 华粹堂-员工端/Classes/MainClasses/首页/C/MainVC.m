@@ -39,11 +39,17 @@
 #import "DailySummaryVC.h"
 #import "TomorrowPlanVC.h"
 
+#import "HCTConnet.h"
+#import "HomeInfoModel.h"
+
 @interface MainVC ()<LrdOutputViewDelegate,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate, MainTwoTypeCellDelegate>
 
 @property (nonatomic, strong) LrdOutputView *outputView;
 @property (nonatomic, weak) UITableView  *tableView;
 @property (nonatomic ,strong) MenuView  *menu;
+
+@property (nonatomic, strong) HomeInfoModel *homeModel;
+
 @property (nonatomic, strong) NSMutableArray *cellsArray;
 
 @property (nonatomic, strong) NSString *tiaoStr;
@@ -73,6 +79,9 @@
     [self drawView];
     [self updataCells];
     
+    //请求版本更新
+    [self requestUploadData];
+    
 }
 
 -(void)clickhuifangreloadData {
@@ -88,8 +97,7 @@
 {
     [super viewWillAppear:animated];
     [self initTHData];
-    [self initData];
-    [self.tableView reloadData];
+    [self requestHomePageInfo];
 }
 
 -(void)initTHData
@@ -111,7 +119,7 @@
         }
     }
     if(Harr.count > 0) {
-        self.HuiStr = [NSString stringWithFormat:@"%ld个没有填写",Harr.count];
+        self.HuiStr = [NSString stringWithFormat:@"%lu个没有填写",(unsigned long)Harr.count];
     }else {
         self.HuiStr = @"";
     }
@@ -123,7 +131,7 @@
     }
     
     if(Tarr.count > 0) {
-        self.tiaoStr = [NSString stringWithFormat:@"%ld个没有填写",Tarr.count];
+        self.tiaoStr = [NSString stringWithFormat:@"%lu个没有填写",(unsigned long)Tarr.count];
     }else {
         self.tiaoStr = @"";
     }
@@ -132,37 +140,6 @@
 
     [LCProgressHUD hide];
 }
-
--(void)initData {
-    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
-    [params setValue:[ModelMember sharedMemberMySelf].memberId forKey:@"employeeId"];
-    
-    [[LQHTTPSessionManager sharedManager] LQPost:@"employee/getEmployeePerformanceByemployee" parameters:params showTips:@"正在加载..." success:^(id responseObject) {
-        
-        NSString *serve_count = [NSString stringWithFormat:@"%.f", [responseObject[@"serve_count"]floatValue]];
-        NSString *money_in_sum = [NSString stringWithFormat:@"%.2f", [responseObject[@"money_in_sum"]floatValue]];
-        NSString *money_out_sum = [NSString stringWithFormat:@"%.2f", [responseObject[@"money_out_sum"]floatValue]];
-        NSLog(@"---%@---%@---%@",serve_count,money_in_sum,money_out_sum);
-    
-        
-        [UserDefaults setValue:serve_count forKey:@"serve_count"];
-        [UserDefaults synchronize];
-        
-        [UserDefaults setValue:money_in_sum forKey:@"money_in_sum"];
-        [UserDefaults synchronize];
-        
-        [UserDefaults setValue:money_out_sum forKey:@"money_out_sum"];
-        [UserDefaults synchronize];
-        
-        [self.tableView reloadData];
-        
-    } successBackfailError:^(id responseObject) {
-        
-    } failure:^(NSError *error) {
-        
-    }];
-}
-
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
@@ -220,6 +197,7 @@
     tableView.delegate = self;
     tableView.dataSource = self;
     tableView.backgroundColor = HEXCOLOR(0xeeeeee);
+    tableView.showsVerticalScrollIndicator = NO;
     [self.view addSubview:tableView];
     self.tableView = tableView;
     
@@ -227,7 +205,7 @@
     .leftSpaceToView(self.view,0)
     .rightSpaceToView(self.view,0)
     .topSpaceToView(self.view,0)
-    .bottomSpaceToView(self.view,0);
+    .bottomSpaceToView(self.view,49);
     
 //    tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(headerRefersh)];
 //    tableView.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(footerRefersh)];
@@ -343,18 +321,14 @@
     if ([dic[kCell] isEqualToString:@"MainOneTypeCell"])
     {
         MainOneTypeCell *cell = [MainOneTypeCell cellWithTableView:tableView];
-        cell.model = [ModelMember sharedMemberMySelf];
+        cell.model = self.homeModel;
         return cell;
     }
     if ([dic[kCell] isEqualToString:@"MainTwoTypeCell"])
     {
         MainTwoTypeCell *cell = [MainTwoTypeCell cellWithTableView:tableView];
         cell.delegate = self;
-        cell.label1.text = [UserDefaults valueForKey:@"serve_count"];
-        cell.label2.text = [UserDefaults valueForKey:@"money_in_sum"];
-        cell.label3.text = [UserDefaults valueForKey:@"money_out_sum"];
-        
-        
+        cell.model = self.homeModel;
         return cell;
     }
     if ([dic[kCell] isEqualToString:@"MainThreeTypeCell"])
@@ -447,6 +421,9 @@
     if ([dic[kCell] isEqualToString:@"MainOneTypeCell"])
     {
         return 0.01;
+    }else if ([dic[kCell] isEqualToString:@"MainThreeTypeCell"])
+    {
+        return 0.01;
     }
     
     return 5;
@@ -506,5 +483,76 @@
             break;
     }
 }
+
+#pragma mark ============= 网络 =================
+//请求首页数据
+- (void)requestHomePageInfo
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setValue:[ModelMember sharedMemberMySelf].memberId forKey:@"employeeId"];
+    
+    [HCTConnet getHomeEmployeePageInfo:params success:^(id responseObject) {
+        
+        self.homeModel = [HomeInfoModel mj_objectWithKeyValues:responseObject];
+        
+        [self.tableView reloadData];
+        
+    } successBackfailError:^(id responseObject) {
+        
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        
+    }];
+}
+
+//请求更新
+- (void)requestUploadData
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setValue:@(582) forKey:@"type"]; //581: android员工端  582: iOS员工端
+
+    [params setValue:VERSION_BUILD forKey:@"ver"]; //当前版本
+    
+    [HCTConnet getOtherIsUpdate:params success:^(id responseObject) {
+        
+        //H 测试
+        NSString *flag = [NSString stringWithFormat:@"%@",[responseObject objectForKey:@"flag"]]; //0－无更新  1-有更新 2-强制更新
+        NSString *downloadUrl = [NSString stringWithFormat:@"%@",[responseObject objectForKey:@"downloadUrl"]];
+        
+//        if ([@"1" isEqualToString:flag]){
+//            [self isEnForseUpdateWithNewVersion:NO andURL:downloadUrl];
+//        }else if ([@"2" isEqualToString:flag]){
+//            [self isEnForseUpdateWithNewVersion:YES andURL:downloadUrl];
+//        }else {
+//            
+//        }
+
+    } successBackfailError:^(id responseObject) {
+        
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        
+    }];
+}
+
+- (void)isEnForseUpdateWithNewVersion:(BOOL) isEnForse andURL:(NSString *)url{ //是否强制
+    
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"版本更新" message:@"检测到有新的版本，请尽快更新吧" preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *done = [UIAlertAction actionWithTitle:@"前往更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url]];
+        
+    }];
+    [alertController addAction:done];
+    
+    if (!isEnForse){
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"下次再说" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            
+        }];
+        [alertController addAction:cancel];
+    }
+    
+    [self presentViewController:alertController animated:YES completion:nil];
+}
+
 
 @end

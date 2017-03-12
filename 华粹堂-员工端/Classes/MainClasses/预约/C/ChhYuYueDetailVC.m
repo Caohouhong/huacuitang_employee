@@ -12,6 +12,7 @@
 #import "ChhYuYueTableViewCell.h"
 #import "ChhYuYueDetailBottomView.h"
 #import "ChhYuYueDetailHeaderView.h"
+#import "ModelGuKe.h"
 
 
 @interface ChhYuYueDetailVC ()<UITableViewDelegate, UITableViewDataSource,ChhYuYueDetailBottomViewDelegate>
@@ -33,9 +34,6 @@
     self.view.backgroundColor = COLOR_BackgroundColor;
     
     titleArray = @[@"门店",@"调理师",@"专家看诊",@"时间",@"预约项目",@"目标",@"目标项目／切入点",@"状态",@"备注"];
-    
-    UIBarButtonItem *rightBar = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"calendar"] style:UIBarButtonItemStylePlain target:self action:@selector(didClickRightBar)];
-    self.navigationItem.rightBarButtonItem = rightBar;
     
     [self drawView];
     
@@ -97,6 +95,7 @@
     [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     btn.titleLabel.font = [UIFont systemFontOfSize:16];
     btn.backgroundColor = COLOR_ButtonBackGround_Blue;
+    [btn addTarget:self action:@selector(finishAction) forControlEvents:UIControlEventTouchUpInside];
     btn.layer.cornerRadius = 5;
     [footerView addSubview:btn];
     
@@ -188,14 +187,12 @@
 - (void)requestData
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
-//     [params setValue:self.healthbookingId forKey:@"healthbookingId"];
-// H 测试
-    [params setValue:@(146) forKey:@"healthbookingId"];
+    [params setValue:self.healthbookingId forKey:@"healthbookingId"];
 
     [HCTConnet getHomeGetHealthBookingDetailV2:params success:^(id responseObject) {
         
         self.model = [ModelHealthBooking mj_objectWithKeyValues:responseObject];
-        [self refreshHeaderUI];
+        self.headerView.yuyueModel = self.model;
         [self.tableView reloadData];
     
     } successBackfailError:^(id responseObject) {
@@ -205,28 +202,105 @@
     }];
 }
 
-- (void)refreshHeaderUI
+
+/**
+ 标记完成
+ */
+- (void)requestBookingToFinish
 {
-    //H 测试
-    _headerView.nameTextlabel.text = self.model.employeeName;
-    _headerView.phoneTextlabel.text = self.model.mobile_phone;
-    _headerView.addressTextlabel.text = self.model.s_name;
     
-//    _headerView.yearTextlabel.text = self.model.birthday;
-    _headerView.sexImageView.image = ([@"1" isEqualToString:self.model.self.sex]) ? [UIImage imageNamed:@"icon_girl"] : [UIImage imageNamed:@"icon_boy"];
-//    _headerView.iconImageView.image =  //头像地址
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setValue:self.healthbookingId forKey:@"healthBookingId"];
+    [params setValue:@(0) forKey:@"state"];
+    [params setValue:self.model.name forKey:@"customerName"];
+    [params setValue:self.model.book_start_time forKey:@"track_date"];
+    [params setValue:self.model.book_start_time forKey:@"visit_time"];
+    [params setValue:self.model.sid forKey:@"e_id"];
+    [params setValue:self.model.s_name forKey:@"shopName"];
+    [params setValue:self.model.mobile_phone forKey:@"customerTel"];
+    [params setValue:self.model.mobile_phone forKey:@"customerMobilePhone"];
+    
+    
+    [[LQHTTPSessionManager sharedManager] LQPost:@"healthBooking/bookingToFinish" parameters:params showTips:@"正在加载..." success:^(id responseObject) {
+        
+        ModelHealthBooking *bookModel = self.model;
+        bookModel.state = @"1";
+        bookModel.customerName = bookModel.name;
+        bookModel.track_date = bookModel.book_start_time;
+        bookModel.visit_time = bookModel.book_start_time;
+        bookModel.e_id = bookModel.sid;
+        bookModel.shopName = bookModel.s_name; //门店
+        bookModel.customerTel = bookModel.mobile_phone;
+        bookModel.customerMobilePhone = bookModel.mobile_phone;
+        
+        NSMutableArray *tiaoliArr = [[NSMutableArray array]init];
+        [tiaoliArr addObject:bookModel];
+        [[DataManage sharedMemberMySelf] saveTiaoLiDataWithModelArray:tiaoliArr];
+        [[DataManage sharedMemberMySelf] saveHuiFangDataWithModelArray:tiaoliArr];
+        
+        [LCProgressHUD showSuccess:@"标记成功"];
+        
+        [self.navigationController popViewControllerAnimated:YES];
+    } successBackfailError:^(id responseObject) {
+        
+    } failure:^(NSError *error) {
+        
+    }];
 }
 
 #pragma mark - 日历按钮
-- (void)didClickRightBar
-{
-    
-}
+//- (void)didClickRightBar
+//{
+//    
+//}
 
 #pragma ChhYuYueDetailBottomViewDelegate 底部按钮点击代理
 - (void)bottomBtnClickWithTag:(ChhYuYueDetailBotViewType)tag
 {
-    
+    switch (tag) {
+        case ChhYuYueDetailBotViewTypeCall:
+        {
+            NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"telprompt://%@",self.model.mobile_phone];//回访手机号
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+        }
+            break;
+        case ChhYuYueDetailBotViewTypeMessage:{
+            NSMutableString * str=[[NSMutableString alloc] initWithFormat:@"sms://%@",self.model.mobile_phone];//回访手机号
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+        }
+           
+            break;
+        case ChhYuYueDetailBotViewTypeChat:
+        {
+            NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+            [params setValue:self.model.c_id forKey:@"customerId"];
+            
+            [[LQHTTPSessionManager sharedManager] LQPost:@"customer/getCustomer" parameters:params showTips:@"" success:^(id responseObject) {
+                ModelGuKe *GukeModel = [ModelGuKe mj_objectWithKeyValues:responseObject];
+                
+                if (!GukeModel.imUserName.length) {
+                    
+                    [LCProgressHUD showFailure:@"当前客户不可聊天"];
+                    return;
+                }
+                
+                EaseMessageViewController *vc = [[EaseMessageViewController alloc] initWithConversationChatter:GukeModel.imUserName conversationType:EMConversationTypeChat];
+                vc.navigationItem.title = GukeModel.name;
+                vc.receiverMemberId = GukeModel.sid;
+                vc.receiverPortrait = GukeModel.portrait;
+                vc.receiverName = GukeModel.name;
+                vc.receiverPhone = GukeModel.telephone;
+                [self.navigationController pushViewController:vc animated:YES];
+            } successBackfailError:^(id responseObject) {
+                
+            } failure:^(NSError *error) {
+                
+            }];
+        }
+                break;
+        default:
+            break;
+    }
 }
 
 
@@ -242,5 +316,9 @@
      return attributuStr;
 }
 
+//标记完成
+- (void)finishAction{
+    [self requestBookingToFinish];
+}
 
 @end

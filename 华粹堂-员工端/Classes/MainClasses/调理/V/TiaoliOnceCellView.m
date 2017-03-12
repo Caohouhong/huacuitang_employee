@@ -46,8 +46,13 @@
     _rightButton = [[UIButton alloc] init];
     _rightButton.titleLabel.font = SYSTEM_FONT_(15);
     [_rightButton setTitleColor:COLOR_Text_Blue forState:UIControlStateNormal];
-    [_rightButton addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_rightButton];
+    
+    _fullButton = [[UIButton alloc] init];
+    _fullButton.backgroundColor = [UIColor clearColor];
+    _fullButton.hidden = YES;
+    [self addSubview:_fullButton];
+    
     
     dividerLine1.sd_layout
     .leftEqualToView(self)
@@ -79,10 +84,11 @@
     .widthIs(65)
     .heightRatioToView(self,1);
     
-}
+    _fullButton.sd_layout
+    .leftEqualToView(self)
+    .topEqualToView(self)
+    .widthIs(ScreenWidth)
+    .heightRatioToView(self,1);
 
-- (void)buttonAction:(UIButton *)btn{
-    
 }
-
 @end

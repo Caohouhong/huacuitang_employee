@@ -261,12 +261,14 @@ NSInteger menuViewWith = 200;
     vc.didClickDateBlock = ^(NSDate *startDate,NSDate*endDate){
         @strongify(self);
         self.startDate = startDate;
-        self.endDate = endDate;
+//        self.endDate = endDate;
         
         NSString *dateStr1 = [NSDate dateStringWithTimeDate:startDate dateFormat:@"yyyy-MM-dd"];
-        NSString *dateStr2 = [NSDate dateStringWithTimeDate:endDate dateFormat:@"yyyy-MM-dd"];
+////        NSString *dateStr2 = [NSDate dateStringWithTimeDate:endDate dateFormat:@"yyyy-MM-dd"];
+//        
+//        self.dateLabel.text = [NSString stringWithFormat:@"选择的日期：%@~%@",dateStr1,dateStr2];
         
-        self.dateLabel.text = [NSString stringWithFormat:@"选择的日期：%@~%@",dateStr1,dateStr2];
+        self.dateLabel.text = [NSString stringWithFormat:@"选择的日期：%@",dateStr1];
         
         for (int i = 100; i < 109 ; i++) {
             UIButton *btn = [self.showView viewWithTag:i];

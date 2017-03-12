@@ -80,7 +80,6 @@
     UILabel *label1_2 = [[UILabel alloc] init];
     label1_2.font = [UIFont systemFontOfSize:14];
     label1_2.textColor = HEXCOLOR(0x44b8f6);
-    label1_2.text = [NSString stringWithFormat:@"%@",[UserDefaults valueForKey:@"serve_count"]];;
     label1_2.textAlignment = NSTextAlignmentCenter;
     [self.contentView addSubview:label1_2];
     self.label1 = label1_2;
@@ -89,7 +88,6 @@
     label2_2.font = [UIFont systemFontOfSize:14];
     label2_2.textColor = HEXCOLOR(0x44b8f6);
     label2_2.textAlignment = NSTextAlignmentCenter;
-    label2_2.text = [NSString stringWithFormat:@"%@",[UserDefaults valueForKey:@"money_in_sum"]];
     [self.contentView addSubview:label2_2];
     self.label2 = label2_2;
     
@@ -97,7 +95,6 @@
     label3_2.font = [UIFont systemFontOfSize:14];
     label3_2.textColor = HEXCOLOR(0xe43140);
     label3_2.textAlignment = NSTextAlignmentCenter;
-    label3_2.text = [NSString stringWithFormat:@"%@",[UserDefaults valueForKey:@"money_out_sum"]];
     [self.contentView addSubview:label3_2];
     self.label3 = label3_2;
     
@@ -105,7 +102,6 @@
     label4_2.font = [UIFont systemFontOfSize:14];
     label4_2.textColor = HEXCOLOR(0x44b8f6);
     label4_2.textAlignment = NSTextAlignmentCenter;
-    label4_2.text = [NSString stringWithFormat:@"%@",[UserDefaults valueForKey:@"money_out_sum"]];
     [self.contentView addSubview:label4_2];
     self.label4 = label4_2;
     
@@ -113,7 +109,6 @@
     label5_2.font = [UIFont systemFontOfSize:14];
     label5_2.textColor = HEXCOLOR(0x44b8f6);
     label5_2.textAlignment = NSTextAlignmentCenter;
-    label5_2.text = [NSString stringWithFormat:@"%@",[UserDefaults valueForKey:@"money_out_sum"]];
     [self.contentView addSubview:label5_2];
     self.label5 = label5_2;
     
@@ -121,7 +116,6 @@
     label6_2.font = [UIFont systemFontOfSize:14];
     label6_2.textColor = HEXCOLOR(0x44b8f6);
     label6_2.textAlignment = NSTextAlignmentCenter;
-    label6_2.text = [NSString stringWithFormat:@"%@",[UserDefaults valueForKey:@"money_out_sum"]];
     [self.contentView addSubview:label6_2];
     self.label6 = label6_2;
     
@@ -297,6 +291,18 @@
     .bottomEqualToView(self.contentView)
     .widthRatioToView(button1,1)
     .heightRatioToView(button1,1);
+}
+
+- (void)setModel:(HomeInfoModel *)model
+{
+    _model = model;
+    
+    _label1.text = [NSString stringWithFormat:@"%i",[model.service_finished_sum intValue]];
+    _label2.text = [NSString stringWithFormat:@"%i",[model.service_wait_sum intValue]];
+    _label3.text = [NSString stringWithFormat:@"%i",[model.service_twoDay_wait_sum intValue]];
+    _label4.text = [NSString stringWithFormat:@"%.2f",[model.money_in_sum doubleValue]];
+    _label5.text = [NSString stringWithFormat:@"%.2f",[model.money_out_sum doubleValue]];
+    _label6.text = [NSString stringWithFormat:@"%.2f",[model.goal_sum doubleValue]];
 }
 
 

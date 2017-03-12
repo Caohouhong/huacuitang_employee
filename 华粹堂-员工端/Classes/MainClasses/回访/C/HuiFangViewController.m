@@ -17,12 +17,22 @@
 @property (nonatomic, weak) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) TopSelectView *topSelectView;
+@property (nonatomic, strong) NSMutableArray *cacheArray;
 
 @property (nonatomic, assign) int pageNo;
 @property (nonatomic, assign) int mType;
 @end
 
 @implementation HuiFangViewController
+
+- (NSMutableArray *)cacheArray
+{
+    if (!_cacheArray){
+        _cacheArray = [NSMutableArray array];
+    }
+    return _cacheArray;
+}
+
 
 - (NSMutableArray *)dataArray
 {
@@ -42,6 +52,8 @@
     self.pageNo = 1;
     
     [self drawView];
+    
+    [self reloadCacheData];
 }
 
 - (void)drawView
@@ -119,7 +131,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    HuiFangModel *model = self.dataArray[indexPath.row];
     HuiFangDetailVC *vc = [[HuiFangDetailVC alloc] init];
+    vc.model = model;
     vc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -170,14 +184,39 @@
 
 - (void)headerRefersh
 {
+    if (self.mType == 0){
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
+        return;
+    }
+
     self.pageNo = 1;
     [self requestData];
 }
 
 - (void)footerRefersh
 {
+    
+    if (self.mType == 0){
+        [self.tableView.mj_header endRefreshing];
+        [self.tableView.mj_footer endRefreshing];
+        return;
+    }
     self.pageNo ++;
     [self requestData];
+}
+
+
+//加载未填写的数据
+- (void)reloadCacheData{
+    NSArray *Tarray = [[DataManage sharedMemberMySelf] getHuiFangModelArray];
+    for(ModelTrackManage * model in Tarray) {
+        if([model.state isEqualToString:@"1"]){ //1为未填写
+            [self.cacheArray addObject:model];
+        }
+    }
+    [self.dataArray addObjectsFromArray:self.cacheArray];
+    [self.tableView reloadData];
 }
 
 
@@ -195,20 +234,24 @@
         case TopSelectViewTypeLeft:
             [self.topSelectView.leftButton setTitleColor:COLOR_Text_Blue forState:UIControlStateNormal];
             self.mType = 0;
+            [self.dataArray addObjectsFromArray:self.cacheArray];
+            [self.tableView reloadData];
             break;
         case TopSelectViewTypeCenter:
             [self.topSelectView.centerButton setTitleColor:COLOR_Text_Blue forState:UIControlStateNormal];
             self.mType = 1;
+             [self requestData];
             break;
         case TopSelectViewTypeRight:
             [self.topSelectView.rightButton setTitleColor:COLOR_Text_Blue forState:UIControlStateNormal];
             self.mType = 2;
+             [self requestData];
             break;
         default:
             break;
     }
     
-    [self requestData];
+   
 }
 
 @end

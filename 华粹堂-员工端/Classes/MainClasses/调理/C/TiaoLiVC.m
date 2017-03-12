@@ -19,6 +19,7 @@
 @property (nonatomic, weak) UITableView *tableView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
 @property (nonatomic, strong) TopSelectView *topSelectView;
+@property (nonatomic, strong) NSMutableArray *cacheArray;
 
 @property (nonatomic, assign) int pageNo;
 @property (nonatomic, assign) int type;
@@ -26,6 +27,14 @@
 @end
 
 @implementation TiaoLiVC
+
+- (NSMutableArray *)cacheArray
+{
+    if (!_cacheArray){
+        _cacheArray = [NSMutableArray array];
+    }
+    return _cacheArray;
+}
 
 - (NSMutableArray *)dataArray
 {
@@ -46,6 +55,7 @@
     
     [self drawView];
     [self requestData];
+//    [self reloadCacheData];
 }
 
 - (void)drawView
@@ -84,7 +94,6 @@
     [self.view addSubview:self.topSelectView];
 }
 
-
 #pragma mark - ==== UITableViewDelegate,UITableViewDataSource ====
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -101,15 +110,15 @@
     WaitServeTableViewCell *cell = [WaitServeTableViewCell cellWithTableView:self.tableView];
     cell.trackModel = self.dataArray[indexPath.row];
     
-    if (self.type == 1){
-        cell.rightBottomLabel.text = @"状态：未填写";
-        cell.rightBottomLabel.textColor = COLOR_Gray;
+    if (self.type == 3){
+        cell.rightBottomLabel.text = @"状态：已审核";
+        cell.rightBottomLabel.textColor = COLOR_TEXT_GREEN_RED;
     }else if (self.type == 2){
         cell.rightBottomLabel.text = @"状态：审核中";
         cell.rightBottomLabel.textColor = COLOR_TEXT_ORANGE_RED;
     }else {
-        cell.rightBottomLabel.text = @"状态：已审核";
-        cell.rightBottomLabel.textColor = COLOR_TEXT_GREEN_RED;
+        cell.rightBottomLabel.text = @"状态：未填写";
+        cell.rightBottomLabel.textColor = COLOR_Gray;
     }
     
     return cell;
@@ -122,7 +131,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    ModelTrackManage *model = self.dataArray[indexPath.row];
+    
     TiaoliDetailVC *vc = [[TiaoliDetailVC alloc] init];
+    vc.model = model;
     vc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -163,6 +175,8 @@
         [self.tableView.mj_footer endRefreshing];
         
     } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        self.dataArray = [NSMutableArray array];
+        [self.tableView reloadData];
         [self.tableView.mj_header endRefreshing];
         [self.tableView.mj_footer endRefreshing];
     }];
@@ -170,19 +184,51 @@
 
 - (void)headerRefersh
 {
+//    if (self.type == 1){
+//        [self.tableView.mj_header endRefreshing];
+//        [self.tableView.mj_footer endRefreshing];
+//        return;
+//    }
+    
     self.pageNo = 1;
     [self requestData];
 }
 
 - (void)footerRefersh
 {
+//    if (self.type == 1){
+//        [self.tableView.mj_header endRefreshing];
+//        [self.tableView.mj_footer endRefreshing];
+//        return;
+//    }
     self.pageNo ++;
     [self requestData];
+}
+
+//加载未填写的数据
+- (void)reloadCacheData{
+    NSArray *Tarray = [[DataManage sharedMemberMySelf] getTiaoLiModelArray];
+    for(ModelTrackManage * model in Tarray) {
+        if([model.state isEqualToString:@"1"]){ //1为未填写
+            [self.cacheArray addObject:model];
+        }
+    }
+    
+    DLog(@"%@",self.cacheArray);
+    
+    [self.dataArray addObjectsFromArray:self.cacheArray];
+    
+     DLog(@"%@",self.dataArray);
+    
+    [self.tableView reloadData];
 }
 
 #pragma mark - TopSelectViewDelegate 顶部按钮代理
 - (void)topButtonClickWithTag:(TopSelectViewType)tag
 {
+      [self.dataArray removeAllObjects];
+      self.pageNo = 1;
+    
        [self.topSelectView.leftButton setTitleColor:COLOR_darkGray forState:UIControlStateNormal];
        [self.topSelectView.rightButton setTitleColor:COLOR_darkGray forState:UIControlStateNormal];
        [self.topSelectView.centerButton setTitleColor:COLOR_darkGray forState:UIControlStateNormal];
@@ -191,14 +237,18 @@
         case TopSelectViewTypeLeft:
             [self.topSelectView.leftButton setTitleColor:COLOR_Text_Blue forState:UIControlStateNormal];
             self.type = 1;
+//            [self.dataArray addObjectsFromArray:self.cacheArray];
+//            [self.tableView reloadData];
             break;
         case TopSelectViewTypeCenter:
             [self.topSelectView.centerButton setTitleColor:COLOR_Text_Blue forState:UIControlStateNormal];
             self.type = 2;
+//            [self requestData];
             break;
         case TopSelectViewTypeRight:
             [self.topSelectView.rightButton setTitleColor:COLOR_Text_Blue forState:UIControlStateNormal];
             self.type = 3;
+//            [self requestData];
             break;
         default:
             break;

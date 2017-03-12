@@ -10,6 +10,11 @@
 
 @interface BackFourTableViewCell : UITableViewCell
 @property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UIButton *adviceBtn0;
+@property (nonatomic, strong) UIButton *adviceBtn1;
+@property (nonatomic, strong) UIButton *adviceBtn2;
+@property (nonatomic, strong) UIButton *adviceBtn3;
+
 
 + (BackFourTableViewCell *)cellWithTableView:(UITableView *)tableView;
 @end

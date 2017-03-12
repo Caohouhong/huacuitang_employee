@@ -25,6 +25,7 @@ pod 'FMDB', '~> 2.6.2'
 pod 'TimesSquare', '~> 1.0.2'
 pod 'HyphenateLite_CN'
 pod 'WHC_Model', '~> 1.6.4'
+pod 'FDFullscreenPopGesture', '1.1'
 
 end
 

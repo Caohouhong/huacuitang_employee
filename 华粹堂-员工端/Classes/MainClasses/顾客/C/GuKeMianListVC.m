@@ -47,6 +47,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    ABCCate = 264;  //最后一次到店时间
+    gukeCate = 0;   //所有顾客
+    timeCate = 1;   //A类
+    self.pageNo = 1;
     
     [self drawNav];
     [self drawTabChooseView];
@@ -95,8 +99,8 @@
 
 - (void)drawNav
 {
-    UIBarButtonItem *rightBarBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_search"] style:UIBarButtonItemStylePlain target:self action:@selector(search)];
-    self.navigationItem.rightBarButtonItem = rightBarBtn;
+//    UIBarButtonItem *rightBarBtn = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"icon_search"] style:UIBarButtonItemStylePlain target:self action:@selector(search)];
+//    self.navigationItem.rightBarButtonItem = rightBarBtn;
     
 //    UIView *titleView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 200, 35)];//allocate titleView
 //    UIColor *color =  self.navigationController.navigationBar.barTintColor;
@@ -151,7 +155,6 @@
     if (self.menu.isRightViewHidden) {
         [self.menu openLeftView];
     }
-
 }
 
 - (void)pullDownMenuView:(SPullDownMenuView *)menu didSelectedIndex:(NSIndexPath *)indexPath
@@ -204,21 +207,25 @@
     
     if (self.menu.nameSearchTextfield.text.length)
     {
-        [params setValue:self.menu.nameSearchTextfield.text forKey:@"customerNameLike"];
+        [params setValue:self.menu.nameSearchTextfield.text forKey:@"goodName"];
     }
-    if (self.menu.libieId.length)
+    if (self.menu.customSearchTextfield.text.length)
     {
-        [params setValue:self.menu.libieId forKey:@"libieId"];
+        [params setValue:self.menu.customSearchTextfield.text forKey:@"customerNameLike"];
+    }
+    //消费区间
+    if (self.menu.xiaoFeiMin.text.length)
+    {
+        [params setValue:self.menu.xiaoFeiMin.text forKey:@"xiaofeiMin"];
+    }
+    if (self.menu.xiaoFeiMax.text.length)
+    {
+        [params setValue:self.menu.xiaoFeiMax.text forKey:@"xiaofeiMax"];
     }
 
-    if (self.menu.shopId.length)
+    if (self.menu.level.length)
     {
-        [params setValue:self.menu.shopId forKey:@"shopId"];
-    }
-    
-    if (self.menu.employeeId.length)
-    {
-        [params setValue:self.menu.employeeId forKey:@"employeeId"];
+        [params setValue:self.menu.level forKey:@"level"];
     }
     
     //排序1 2 3

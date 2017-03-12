@@ -7,7 +7,10 @@
 //
 
 #import "ChildBaseViewController.h"
-
+#import "ReturnVisitModel.h"
 @interface ReturnVisitVC : ChildBaseViewController
+@property(nonatomic ,strong) NSString *YongHuId;
+@property(nonatomic ,strong) NSString *name;
 
+@property(nonatomic ,strong) ReturnVisitModel *model;
 @end

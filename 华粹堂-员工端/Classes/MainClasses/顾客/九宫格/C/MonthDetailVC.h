@@ -7,6 +7,7 @@
 //
 
 #import "ChildBaseViewController.h"
+#import "MonthDetailModel.h"
 typedef NS_ENUM(NSInteger, MonthDetailViewType) {
     MonthDetailViewTypeBegin   = 0,
     MonthDetailViewTypeAudit   = 1,
@@ -16,4 +17,7 @@ typedef NS_ENUM(NSInteger, MonthDetailViewType) {
 
 @interface MonthDetailVC : ChildBaseViewController
 @property (nonatomic, assign) MonthDetailViewType viewType;
+@property (nonatomic, copy) NSString *YongHuId;
+@property (nonatomic, strong) MonthDetailModel *model;
+
 @end

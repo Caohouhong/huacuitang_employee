@@ -9,5 +9,7 @@
 #import "ChildBaseViewController.h"
 
 @interface HealthFormVC : ChildBaseViewController
+@property(nonatomic ,strong) NSString *YongHuId;
+@property(nonatomic ,strong) NSString *name;
 
 @end

@@ -91,9 +91,6 @@
 - (void)setModel:(AccountModel *)model
 {
     _model = model;
-    
-    
-    
 }
 
 @end

@@ -11,6 +11,7 @@
 #import "HuaCuiTangHelper.h"
 #import "CheckDetailTableViewCell.h"
 #import "HCTConnet.h"
+#import "JumpVC.h"
 #import "BodyDetailModel.h"
 @interface BodyDetailVC ()<UITableViewDelegate, UITableViewDataSource>
 {
@@ -75,14 +76,14 @@
     if (indexPath.section == 0 || indexPath.section == titleArray.count - 1){
         ChhYuYueTableViewCell *cell = [ChhYuYueTableViewCell cellWithTableView:self.tableView];
         
-        cell.leftLabel.attributedText = [HuaCuiTangHelper changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@:  %@",titleArray[indexPath.section][indexPath.row],totalArray[indexPath.section][indexPath.row]] changeText:totalArray[indexPath.section][indexPath.row] andColor:COLOR_Gray];
+        cell.leftLabel.attributedText = [HuaCuiTangHelper changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@:  %@",titleArray[indexPath.section][indexPath.row],totalArray[0][indexPath.row]] changeText:@"" andColor:COLOR_Gray];
         
         return cell;
     }else  {
         CheckDetailTableViewCell *cell = [CheckDetailTableViewCell cellWithTableView:self.tableView];
         
         cell.leftLabel.text = titleArray[indexPath.section][indexPath.row];
-//        cell.bottomLabel.text = dataArr[indexPath.row];
+        cell.bottomLabel.text = totalArray[indexPath.section][indexPath.row];
         return cell;
     }
 }
@@ -119,12 +120,13 @@
     [HCTConnet getBodyDetailVC:params success:^(id responseObject) {
         self.model = [BodyDetailModel mj_objectWithKeyValues:responseObject];
 titleArray = @[@[@"基本体质",@"相关证型",@"所属脏腑",@"其他"],@[@"客户主诉"],@[@"咨询辩证"],@[@"调理方案"],@[@"家居养生要求"],@[@"专家"]];
-        totalArray = @[@[[self judgeString:self.model.dic_bp_values],[self judgeString:self.model.dic_rs_values],[self judgeString:self.model.dic_organs_values],@""]];
-        dataArr = @[@[self.model.customers_complained],@[self.model.consulting_dialectical],@[self.model.conditioning_program],@[self.model.home_health_req]];
-//        dataArr = @[@[self.model.customers_complained,self.model.consulting_dialectical,self.model.conditioning_program,self.model.home_health_req]];
+        totalArray = @[@[[self judgeString:self.model.dic_bp_values],[self judgeString:self.model.dic_rs_values],[self judgeString:self.model.dic_organs_values],@""],@[self.model.customers_complained],@[self.model.consulting_dialectical],@[self.model.conditioning_program],@[self.model.home_health_req]];
+
+        
         NSLog(@"*******%@******",totalArray);
         [self.tableView reloadData];
     } successBackfailError:^(id responseObject) {
+        
         
     } failure:^(NSURLSessionDataTask *operation, NSError *error) {
         
@@ -136,10 +138,37 @@ titleArray = @[@[@"基本体质",@"相关证型",@"所属脏腑",@"其他"],@[@"
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == 1) {
+        JumpVC *vc = [[JumpVC alloc] init];
+        vc.titlel =@"客户主诉";
+        vc.content = [self judgeString:self.model.customers_complained];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    if (indexPath.section == 2) {
+        JumpVC *vc = [[JumpVC alloc] init];
+        vc.titlel =@"咨询辩证";
+        vc.content = [self judgeString:self.model.consulting_dialectical];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 
-    
-    
-    
+    if (indexPath.section == 3) {
+        JumpVC *vc = [[JumpVC alloc] init];
+        vc.titlel =@"调理方案";
+        vc.content = [self judgeString:self.model.conditioning_program];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+
+    if (indexPath.section == 4) {
+        JumpVC *vc = [[JumpVC alloc] init];
+        vc.titlel =@"家居养生要求";
+        vc.content = [self judgeString:self.model.home_health_req];
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+
     
 }
 - (NSString *)judgeString:(id)str{

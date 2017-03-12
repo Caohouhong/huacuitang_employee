@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0810"
+   LastUpgradeVersion = "0700"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "679C57485977EDE7A80D9442F164463A"
+               BlueprintIdentifier = "867139F6FBDBA3918B6A0665DE113D2A"
                BuildableName = "SDWebImage_ProgressView.framework"
                BlueprintName = "SDWebImage-ProgressView"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "679C57485977EDE7A80D9442F164463A"
+            BlueprintIdentifier = "867139F6FBDBA3918B6A0665DE113D2A"
             BuildableName = "SDWebImage_ProgressView.framework"
             BlueprintName = "SDWebImage-ProgressView"
             ReferencedContainer = "container:Pods.xcodeproj">
@@ -60,15 +60,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "679C57485977EDE7A80D9442F164463A"
-            BuildableName = "SDWebImage_ProgressView.framework"
-            BlueprintName = "SDWebImage-ProgressView"
-            ReferencedContainer = "container:Pods.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

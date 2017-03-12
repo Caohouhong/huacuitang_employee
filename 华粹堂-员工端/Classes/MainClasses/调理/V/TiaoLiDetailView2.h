@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^TiaoLiDetailView2Block)(NSString *, NSString *);
+
 @interface TiaoLiDetailView2 : UIView
 
+@property (nonatomic, copy)TiaoLiDetailView2Block selectBlock;
 
 @end

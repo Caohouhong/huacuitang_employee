@@ -8,6 +8,11 @@
 
 #import "TiaoLiLiftTableViewCell.h"
 
+@interface TiaoLiLiftTableViewCell()
+{
+    NSString *buttonStr;
+}
+@end
 
 @implementation TiaoLiLiftTableViewCell
 
@@ -48,7 +53,7 @@
     _topPlanCell = [[TiaoliOnceCellView alloc] init];
     _topPlanCell.leftNameLabel.text = @"到店理疗配合情况：";
     _topPlanCell.rightButton.hidden = YES;
-    _topPlanCell.rightLabel.text = @"得分：10";
+    _topPlanCell.rightLabel.text = @"得分:--";
     
     UIView *dividerLine1 = [[UIView alloc] init];
     dividerLine1.backgroundColor = COLOR_LineViewColor;
@@ -125,8 +130,50 @@
     return selectBtn;
 }
 
-- (void)buttonAction:(UIButton *)button
+- (void)buttonAction:(UIButton *)btn
 {
+    for(int i = 0; i < 5; i ++){
+        if (btn.tag == 10000+i){
+            btn.selected = YES;
+            btn.layer.borderColor = COLOR_Text_Blue.CGColor;
+            [btn setBackgroundColor:COLOR_BG_DARK_BLUE];
+            continue;//结束本次循环
+        }
+        UIButton *button = (UIButton *)[self viewWithTag:10000 + i];
+        button.selected = NO;
+        button.layer.borderColor = COLOR_LightGray.CGColor;
+        [button setBackgroundColor:[UIColor whiteColor]];
+    }
     
+    switch (btn.tag) {
+        case 10000:
+            buttonStr = @"--";
+            break;
+        case 10001:
+            buttonStr = @"-100";
+            break;
+        case 10002:
+            buttonStr = @"0";
+            break;
+        case 10003:
+            buttonStr = @"60";
+            break;
+        case 10004:
+            buttonStr = @"100";
+            break;
+        
+        default:
+            break;
+    }
+    
+    _topPlanCell.rightLabel.text = [NSString stringWithFormat:@"得分:%@",buttonStr];
+    
+    if ([buttonStr isEqualToString:@"--"]){
+        buttonStr = @"无效";
+    }
+    
+    if (self.cellBlock){
+        self.cellBlock(buttonStr,(int)self.tag);
+    }
 }
 @end

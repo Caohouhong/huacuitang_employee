@@ -48,14 +48,15 @@
 /*店面 */
 @property (nonatomic, copy) NSString *s_name;
 
-/////////////////////////////////////////////////////////////////
+////////////////////////////存储转换/////////////////////////////////////
 /*客户姓名*/
 @property (nonatomic, copy) NSString *customerName;
+
 /* 调理师姓名 */
 @property (nonatomic, copy) NSString *employeeName;
 /*跟踪日期/调理日期/项目日期 */
 @property (nonatomic, copy) NSString *track_date;
-/*填写人编号 */
+/*编号 */
 @property (nonatomic, copy) NSString *e_id;
 /*年龄*/
 @property (nonatomic, copy) NSString *customerAge;
@@ -70,7 +71,9 @@
 //调理手机号
 @property (nonatomic,copy) NSString *customerMobilePhone;
 
-//性别（1-女 2-男） //H 测试
+@property (nonatomic, copy)NSString *shopName; //门店
+
+//性别（1-女 2-男） 
 @property (nonatomic,copy) NSString *sex;
 
 /* 目标 */

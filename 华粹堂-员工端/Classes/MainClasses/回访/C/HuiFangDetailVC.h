@@ -7,7 +7,9 @@
 //
 
 #import "ChildBaseViewController.h"
+#import "HuiFangModel.h"
 
 @interface HuiFangDetailVC : ChildBaseViewController
 
+@property (nonatomic, strong) HuiFangModel *model;
 @end

@@ -174,7 +174,9 @@
 //按钮点击
 - (void)remindAction
 {
-    
+    if (self.block){
+        self.block();
+    }
 }
 
 - (void)setModel:(ServeModel *)model
@@ -201,29 +203,30 @@
     }
 }
 
+//调理备忘列表
 - (void)setTrackModel:(ModelTrackManage *)trackModel
 {
     _trackModel = trackModel;
     
     self.statusImageView.hidden = YES;
     self.alertButton.hidden = YES;
-    self.rightBottomLabel.hidden = YES;
     
     self.leftTopLabel.text = trackModel.customerName;
     self.leftTimeLabel.text = [NSString stringWithFormat:@"预约时间： %@",trackModel.track_date];
     self.leftDoctorLabel.text = [NSString stringWithFormat:@"预约门店： %@",trackModel.shopName];
     //  1 － 专家看诊
-    self.rightExpertLabel.text = [NSString stringWithFormat:@"专家看诊：%@",([@"1" isEqualToString:trackModel.track_type]) ? @"是" : @"否"];
+    self.rightExpertLabel.text = [NSString stringWithFormat:@"专家看诊：%@",([@"1" isEqualToString:trackModel.isExpert]) ? @"是" : @"否"];
     self.leftBottomLabel.text = [NSString stringWithFormat:@"手机号：%@",trackModel.customerMobilePhone];
 }
 
+
+//回访列表
 - (void)setHuiFangModel:(HuiFangModel *)huiFangModel
 {
     _huiFangModel = huiFangModel;
     
     self.statusImageView.hidden = YES;
     self.alertButton.hidden = YES;
-    self.rightBottomLabel.hidden = YES;
     
     self.leftTopLabel.text = huiFangModel.customerName;
     self.leftTimeLabel.text = [NSString stringWithFormat:@"预约时间： %@",[HuaCuiTangHelper changeTimeStyleWithTimeStemp:huiFangModel.serverTime]];

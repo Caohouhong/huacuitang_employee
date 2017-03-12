@@ -7,6 +7,7 @@
 //
 
 #import "ChildBaseViewController.h"
+#import "NurseHealthModel.h"
 typedef NS_ENUM(NSInteger, NurseHealthViewType) {
     NurseHealthViewTypeLog      = 0,
     NurseHealthViewTypeLife     = 1,
@@ -15,4 +16,6 @@ typedef NS_ENUM(NSInteger, NurseHealthViewType) {
 
 @interface NurseHealthVC : ChildBaseViewController
 @property (nonatomic, assign) NurseHealthViewType viewType;
+@property (nonatomic, copy) NSString *YongHuId;
+@property (nonatomic, strong) NurseHealthModel *model;
 @end

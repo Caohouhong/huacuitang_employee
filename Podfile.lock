@@ -14,6 +14,7 @@ PODS:
   - AFNetworking/Serialization (3.1.0)
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
+  - FDFullscreenPopGesture (1.1)
   - FMDB (2.6.2):
     - FMDB/standard (= 2.6.2)
   - FMDB/standard (2.6.2)
@@ -45,6 +46,7 @@ PODS:
 
 DEPENDENCIES:
   - AFNetworking (~> 3.0)
+  - FDFullscreenPopGesture (= 1.1)
   - FMDB (~> 2.6.2)
   - HyphenateLite_CN
   - IQKeyboardManager (~> 4.0.7)
@@ -63,6 +65,7 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
+  FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
   FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
   HyphenateLite_CN: 4df8ca7f075610e512a9f4a9e570cc46ec098e01
   IQKeyboardManager: 69002bb4fea60596b710e57d426abc00e5063630
@@ -72,13 +75,13 @@ SPEC CHECKSUMS:
   ReactiveCocoa: e2db045570aa97c695e7aa97c2bcab222ae51f4a
   SDAutoLayout: e9b36d04b8c0b504762a04d76fbbe5108944297a
   SDCycleScrollView: f72904c77698a7f93a41bcbbc2d78b073bf7326c
-  SDWebImage: '098e97e6176540799c27e804c96653ee0833d13c'
+  SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
   SDWebImage-ProgressView: ee42f6f8119d68ac2062920bc9afb0ccfcf2dea1
   TimesSquare: c4c201495df0ff694524659f640b49f0c26321f9
   UITextView+Placeholder: 77680995fcdd07c3f52ec92fe1150874a2ac89ff
   WHC_Model: 1911e08db84ba886e6fee5ad87cae183921e6a48
   YTKKeyValueStore: 4d002941540dd5108fa23009b71e0f2f937f7a0f
 
-PODFILE CHECKSUM: d13272656a36725da60868832be4f3df0de86175
+PODFILE CHECKSUM: f325aa2781dc27b3d45143e724512d6e0d317d22
 
 COCOAPODS: 1.1.1

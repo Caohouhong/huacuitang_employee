@@ -18,6 +18,9 @@
 + (NSString *)getCurrentDateWithStyleStr:(NSString *)style;
 + (NSString *)changeTimeStyleWithTimeStemp:(NSString *)time;
 
++ (NSString *)changeDateToTimeStmp:(NSDate *)date;
++ (NSString *)changeTimeToTimeStmp:(NSString *)string;
+
 + (NSMutableAttributedString *)changeTextColorWithRestltStr:(NSString *)result changeText:(NSString *)text andColor:(UIColor *)color;
 
 //转json

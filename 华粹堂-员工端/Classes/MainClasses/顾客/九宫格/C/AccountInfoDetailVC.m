@@ -9,10 +9,12 @@
 #import "AccountInfoDetailVC.h"
 #import "ChhYuYueTableViewCell.h"
 #import "HuaCuiTangHelper.h"
-
+#import "HCTConnet.h"
 @interface AccountInfoDetailVC ()<UITableViewDelegate, UITableViewDataSource>
 {
     NSArray *titleArray;
+    NSArray *dataArray;
+
 }
 @property (nonatomic, weak) UITableView *tableView;
 
@@ -24,9 +26,15 @@
     [super viewDidLoad];
     self.navigationItem.title = @"账户信息";
     titleArray = @[@"卡号：",@"项目：",@"余额：",@"剩余次数：",@"办卡时间：",@"最近一次销卡："];
+    dataArray = @[@[[self judgeString:self.model.card_number],[self judgeString:self.model.goods_name],[self judgeString:self.model.balance],[self judgeString:self.model.goods_num],[self judgeString:self.model.create_datetime],[self judgeString:self.model.lastXiaokaTime]]];
+    DLog(@"%@",dataArray);
     [self drawView];
+    //[self requestData];
 }
-
+- (NSString *)judgeString:(id)str{
+    NSString *result = str?str:@"";
+    return result;
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     
@@ -69,39 +77,62 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ChhYuYueTableViewCell *cell = [ChhYuYueTableViewCell cellWithTableView:self.tableView];
+    DLog(@"))))))))%@",dataArray);
+//    cell.leftLabel.attributedText = [HuaCuiTangHelper changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@    %@",titleArray[indexPath.row],dataArray[indexPath.row]] changeText:@"" andColor:COLOR_Gray];
     
-    cell.leftLabel.attributedText = [HuaCuiTangHelper changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@    %@",titleArray[indexPath.row],@"未知"] changeText:@"未知" andColor:COLOR_Gray];
-                                
-//    switch (indexPath.row) {
-//        case 0: //卡号
-//            cell.leftLabel.attributedText = [self changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@:    %@",titleArray[indexPath.row],self.model.s_name] changeText:self.model.s_name];
-//            break;
-//        case 1: //项目
-//            cell.leftLabel.attributedText = [self changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@:    %@",titleArray[indexPath.row],@"现金"] changeText:@"现金"];
-//            break;
-//        case 2: //余额
-//        {
-//            cell.leftLabel.attributedText = [self changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@:    %@",titleArray[indexPath.row],isExper] changeText:isExper];
-//        }
-//            break;
-//        case 3: //剩余次数
-//        {
-//            NSString *time = [NSString stringWithFormat:@"%@~%@",self.model.book_start_time,self.model.book_end_time];
-//            cell.leftLabel.attributedText = [self changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@:    %@",titleArray[indexPath.row],time] changeText:time];
-//        }
-//            break;
-//        case 4: //办卡时间
-//            cell.leftLabel.attributedText = [self changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@:    %@",titleArray[indexPath.row],self.model.book_program] changeText:self.model.book_program];
-//            break;
-//        case 5: //销卡时间
-//            cell.leftLabel.attributedText = [self changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@:    %@",titleArray[indexPath.row],self.model.aims?self.model.aims:@""] changeText:self.model.aims];
-//            break;
-//        default:
-//            break;
-//    }
+    
+    switch (indexPath.row) {
+        case 0: //卡号
+            cell.leftLabel.attributedText = [HuaCuiTangHelper changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@:    %@",titleArray[indexPath.row],self.model.card_number.description] changeText:self.model.card_number.description andColor:COLOR_Gray];
+            break;
+        case 1: //项目
+           cell.leftLabel.attributedText = [HuaCuiTangHelper changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@:    %@",titleArray[indexPath.row],self.model.goods_name.description] changeText:self.model.goods_name.description andColor:COLOR_Gray];
+            break;
+        case 2: //余额
+        {
+            cell.leftLabel.attributedText = [HuaCuiTangHelper changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@:    %@",titleArray[indexPath.row],self.model.balance.description] changeText:self.model.balance.description andColor:COLOR_Gray];
+        }
+            break;
+        case 3: //剩余次数
+        {
+              cell.leftLabel.attributedText = [HuaCuiTangHelper changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@:    %@",titleArray[indexPath.row],self.model.goods_num.description] changeText:self.model.goods_num.description andColor:COLOR_Gray];
+        }
+            break;
+        case 4: //办卡时间
+           cell.leftLabel.attributedText = [HuaCuiTangHelper changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@:    %@",titleArray[indexPath.row],self.model.create_datetime.description] changeText:self.model.create_datetime.description andColor:COLOR_Gray];
+            break;
+        case 5: //销卡时间
+           cell.leftLabel.attributedText = [HuaCuiTangHelper changeTextColorWithRestltStr:[NSString stringWithFormat:@"%@:    %@",titleArray[indexPath.row],self.model.lastXiaokaTime.description] changeText:self.model.lastXiaokaTime.description andColor:COLOR_Gray];
+            break;
+        default:
+            break;
+    }
     
     return cell;
 }
+
+
+#pragma mark - ====网络====
+- (void)requestData
+{
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+    //    [params setValue:self.model.c_id forKey:@"customerId"];
+    [params setValue:self.YongHuId forKey:@"customerId"];
+    
+    
+    [HCTConnet getCustomerAccountInfo:params success:^(id responseObject) {
+        
+        self.model = [AccountModel mj_objectWithKeyValues:responseObject];
+        
+        [self.tableView reloadData];
+        
+    } successBackfailError:^(id responseObject) {
+        
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        
+    }];
+}
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {

@@ -9,5 +9,6 @@
 #import "ChildBaseViewController.h"
 
 @interface SecretLiftVC : ChildBaseViewController
+@property(nonatomic ,strong) NSString *YongHuId;
 
 @end

@@ -23,10 +23,6 @@
 @property (nonatomic, weak) UIButton *C_Btn;
 @property (nonatomic, weak) UIButton *D_Btn;
 
-@property (nonatomic, weak) UITextField *xiaoFeiQuJianTextfield1;
-@property (nonatomic, weak) UITextField *xiaoFeiQuJianTextfield2;
-
-
 @end
 
 @implementation GuKeShaiXuanMenuView
@@ -38,13 +34,10 @@ NSInteger menuViewWith2 = 200;
     if (self = [super initWithFrame:frame])
     {
         menuViewWith2 = ScreenWidth - 25;
-        self.libieId = @"264";
-        self.employeeId = @"";
-        self.shopId = [ModelMember sharedMemberMySelf].s_id;
+        
+        self.level = @"540";
         
         [self drawView];
-        
-        [self didClickMengDianKeHuBtn:self.benRenKeHuBtn];
     }
     
     return self;
@@ -112,8 +105,8 @@ NSInteger menuViewWith2 = 200;
     A_Btn.titleLabel.font = [UIFont systemFontOfSize:14];
     A_Btn.backgroundColor = [UIColor clearColor];
     [A_Btn addTarget:self action:@selector(didClickKeHuLevel:) forControlEvents:UIControlEventTouchUpInside];
+    A_Btn.tag = 20000;
     A_Btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    A_Btn.selected = YES;
     [dengJiBGV addSubview:A_Btn];
     self.A_Btn = A_Btn;
     
@@ -125,6 +118,7 @@ NSInteger menuViewWith2 = 200;
     B_Btn.titleLabel.font = [UIFont systemFontOfSize:14];
     B_Btn.backgroundColor = [UIColor clearColor];
     [B_Btn addTarget:self action:@selector(didClickKeHuLevel:) forControlEvents:UIControlEventTouchUpInside];
+    B_Btn.tag = 20001;
     B_Btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [dengJiBGV addSubview:B_Btn];
     self.B_Btn = B_Btn;
@@ -137,6 +131,7 @@ NSInteger menuViewWith2 = 200;
     C_Btn.titleLabel.font = [UIFont systemFontOfSize:14];
     C_Btn.backgroundColor = [UIColor clearColor];
     [C_Btn addTarget:self action:@selector(didClickKeHuLevel:) forControlEvents:UIControlEventTouchUpInside];
+    C_Btn.tag = 20002;
     C_Btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [dengJiBGV addSubview:C_Btn];
     self.C_Btn = C_Btn;
@@ -149,6 +144,7 @@ NSInteger menuViewWith2 = 200;
     D_Btn.titleLabel.font = [UIFont systemFontOfSize:14];
     D_Btn.backgroundColor = [UIColor clearColor];
     [D_Btn addTarget:self action:@selector(didClickKeHuLevel:) forControlEvents:UIControlEventTouchUpInside];
+    D_Btn.tag = 20003;
     D_Btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [dengJiBGV addSubview:D_Btn];
     self.D_Btn = D_Btn;
@@ -183,7 +179,7 @@ NSInteger menuViewWith2 = 200;
     xiaoFeiQuJianTextfield1.delegate = self;
     xiaoFeiQuJianTextfield1.layer.cornerRadius = 3;
     [self.showView addSubview:xiaoFeiQuJianTextfield1];
-    self.xiaoFeiQuJianTextfield1 = xiaoFeiQuJianTextfield1;
+    self.xiaoFeiMin = xiaoFeiQuJianTextfield1;
     
     UILabel *zhiLabel = [[UILabel alloc] init];
     zhiLabel.font = [UIFont systemFontOfSize:14];
@@ -202,7 +198,7 @@ NSInteger menuViewWith2 = 200;
     xiaoFeiQuJianTextfield2.delegate = self;
     xiaoFeiQuJianTextfield2.layer.cornerRadius = 3;
     [self.showView addSubview:xiaoFeiQuJianTextfield2];
-    self.xiaoFeiQuJianTextfield2 = xiaoFeiQuJianTextfield2;
+    self.xiaoFeiMax = xiaoFeiQuJianTextfield2;
     
     
     UILabel *yuanLabel = [[UILabel alloc] init];
@@ -252,6 +248,16 @@ NSInteger menuViewWith2 = 200;
     nameSearchTextfield.delegate = self;
     [self.showView addSubview:nameSearchTextfield];
     self.nameSearchTextfield = nameSearchTextfield;
+    
+    UITextField *customSearchTextfield = [[UITextField alloc] init];
+    customSearchTextfield.placeholder = @"请输入客户名字";
+    customSearchTextfield.font = [UIFont systemFontOfSize:14];
+    customSearchTextfield.borderStyle = UITextBorderStyleNone;
+    customSearchTextfield.textAlignment = NSTextAlignmentCenter;
+    customSearchTextfield.backgroundColor = HEXCOLOR(0xf7f7f7);
+    customSearchTextfield.delegate = self;
+    [self.showView addSubview:customSearchTextfield];
+    self.customSearchTextfield = customSearchTextfield;
     
     UIButton *cancelBtn = [[UIButton alloc] init];
     [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
@@ -364,6 +370,13 @@ NSInteger menuViewWith2 = 200;
     .rightSpaceToView(self.showView,15)
     .heightIs(30);
     
+    customSearchTextfield.sd_layout
+    .leftSpaceToView(self.showView,15)
+    .topSpaceToView(nameSearchTextfield,5)
+    .rightSpaceToView(self.showView,15)
+    .heightIs(30);
+
+    
     cancelBtn.sd_layout
     .leftSpaceToView(self.showView,0)
     .bottomSpaceToView(self.showView,49)
@@ -399,43 +412,30 @@ NSInteger menuViewWith2 = 200;
 
 - (void)didClickKeHuLevel:(UIButton *)btn
 {
-    NSArray *array = @[@"  A",@"  B",@"  C"];
-    
     self.A_Btn.selected = NO;
     self.B_Btn.selected = NO;
     self.C_Btn.selected = NO;
+    self.D_Btn.selected = NO;
     btn.selected = YES;
-    
-    if ([btn.titleLabel.text isEqualToString:@"  A"])
-    {
-        self.libieId = @"264";
-    }
-    if ([btn.titleLabel.text isEqualToString:@"  B"])
-    {
-        self.libieId = @"265";
-    }
-    if ([btn.titleLabel.text isEqualToString:@"  C"])
-    {
-        self.libieId = @"265";
+    //540-普通会员,541-A类会员,542-AA类会员,543-AAA类会员,544-AAAA类会员'
+    switch (btn.tag) {
+        case 20000:
+            self.level = @"541";
+            break;
+         case 20001:
+            self.level = @"542";
+            break;
+        case 20002:
+            self.level = @"543";
+            break;
+        case 20003:
+            self.level = @"544";
+            break;
+        default:
+            self.level = @"540";
+            break;
     }
 }
-
-- (void)didClickMengDianKeHuBtn:(UIButton *)btn
-{
-    self.benRenKeHuBtn.selected = NO;
-    btn.selected = YES;
-    self.shopId = [ModelMember sharedMemberMySelf].s_id;
-    self.employeeId = @"";
-}
-
-- (void)didClickBenRenKeHuBtn:(UIButton *)btn
-{
-    self.mengDianKeHuBtn.selected = NO;
-    btn.selected = YES;
-    self.employeeId = [ModelMember sharedMemberMySelf].memberId;
-    self.shopId = @"";
-}
-
 #pragma mark -
 #pragma mark ================= UITextFieldDelegate =================
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField

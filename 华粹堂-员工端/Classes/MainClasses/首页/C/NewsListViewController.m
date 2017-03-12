@@ -9,6 +9,8 @@
 #import "NewsListViewController.h"
 #import "ModelMessage.h"
 #import "NewsDetailCell.h"
+#import "ShowPlanViewController.h"
+#import "BaseWebViewController.h"
 //#import "VideoPlayVC.h"
 //#import "TopicsVC.h"
 //#import "TeacherIntroductVC.h"
@@ -98,8 +100,8 @@
 
 -(void)requestData{
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
-//    [params setObject:[UtilString getNoNilString:[UserDefaults valueForKey:@"deviceToken"]] forKey:@"deviceId"];
-    [params setValue:@"867465029895262" forKey:@"deviceId"];
+    
+    [params setObject:[UtilString getNoNilString:[UserDefaults valueForKey:@"deviceToken"]] forKey:@"deviceId"];
     [params setObject:[NSString stringWithFormat:@"%d",self.groupType] forKey:@"groupType"];
     [params setObject:@(self.pageIndex) forKey:@"pageNo"];
     [params setObject:@"20" forKey:@"pageSize"];
@@ -186,6 +188,32 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    NSString *title;
+    
+    ModelMessage *model = self.dataArray[indexPath.row];
+    
+    if (model.groupType == 0){
+        title = @"系统消息";
+    }else if (model.groupType == 1){
+        title = @"满意度调查";
+    }else if (model.groupType == 2){
+        title = @"公司公告";
+    }else {
+        title = model.messageTitle;
+    }
+    
+    if (model.linkType == 0){ //linkType 0 不带链接
+        ShowPlanViewController *vc = [[ShowPlanViewController alloc] init];
+        vc.viewTitle = title;
+        vc.viewContent = model.messageContent;
+        vc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:vc animated:YES];
+    }else {
+        BaseWebViewController *webView = [[BaseWebViewController alloc] initWithTitle:title andUrl:model.linkParams];
+        webView.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:webView animated:YES];
+    }
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{

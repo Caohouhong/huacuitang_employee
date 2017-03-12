@@ -14,6 +14,7 @@
 @property (nonatomic, weak) UILabel *nameLabel;
 @property (nonatomic, weak) UILabel *shopNameLabel;
 @property (nonatomic, weak) UILabel *telNumLabel;
+@property (nonatomic, weak) UIImageView *levelImageView;
 
 @end
 
@@ -57,7 +58,7 @@
     UILabel *nameLabel = [[UILabel alloc] init];
     nameLabel.font = [UIFont systemFontOfSize:16];
     nameLabel.textColor = HEXCOLOR(0x333333);
-    nameLabel.text = @"大强哥";
+    nameLabel.text = @"名字";
     [self.contentView addSubview:nameLabel];
     self.nameLabel = nameLabel;
     
@@ -76,8 +77,9 @@
     self.telNumLabel = telNumLabel;
     
     UIImageView *levelImageView = [[UIImageView alloc] init];
-    levelImageView.image = [UIImage imageNamed:@"icon_sanxing"];
+    levelImageView.image = [UIImage imageNamed:@"icon_home_star3"];
     [self.contentView addSubview:levelImageView];
+    self.levelImageView = levelImageView;
     
     UIView *centerView = [[UIView alloc] init];
     centerView.backgroundColor = [UIColor clearColor];
@@ -115,21 +117,20 @@
     [telNumLabel setSingleLineAutoResizeWithMaxWidth:100];
     
     levelImageView.sd_layout
-    .leftSpaceToView(telNumLabel,15)
+    .leftSpaceToView(telNumLabel,25)
     .topEqualToView(telNumLabel)
     .heightIs(22)
     .widthIs(40);
 }
 
-- (void)setModel:(ModelMember *)model
+- (void)setModel:(HomeInfoModel *)model
 {
     _model = model;
     
-    [self.iconImageView sd_setImageWithURL:IMAGE_URL(model.portrait) placeholderImage:[UIImage imageNamed:@"touxiang"]];
-    self.nameLabel.text = model.name;
+    [self.iconImageView sd_setImageWithURL:IMAGE_URL([ModelMember sharedMemberMySelf].portrait) placeholderImage:[UIImage imageNamed:@"touxiang"]];
+    self.nameLabel.text = model.employee_name;
     self.shopNameLabel.text = [NSString stringWithFormat:@"门店：%@",model.shopName];
-//    self.telNumLabel.text = model.telephone;
-    
+    self.levelImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"icon_home_star%@",model.employee_level]];
 }
 
 @end

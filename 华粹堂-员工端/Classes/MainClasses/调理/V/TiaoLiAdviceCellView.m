@@ -42,11 +42,12 @@
     [topHoldView addSubview:textViewHoldView];
     
     _topTextView = [[UITextView alloc] init];
-    _topTextView.placeholder = @"请填写审核意见";
     _topTextView.backgroundColor = [UIColor whiteColor];
     _topTextView.placeholderColor = COLOR_LightGray;
     _topTextView.font = SYSTEM_FONT_(14);
     _topTextView.textColor = COLOR_Gray;
+    _topTextView.editable = NO;
+    _topTextView.placeholder = @"暂无";
     [textViewHoldView addSubview:_topTextView];
     
     UIView *topDividerLine1 = [[UIView alloc] init];
@@ -57,25 +58,15 @@
     topDividerLine2.backgroundColor = COLOR_LineViewColor;
     [topHoldView addSubview:topDividerLine2];
     
-    UIButton *upBtn = [[UIButton alloc] init];
-    [upBtn setBackgroundImage:[UIImage imageNamed:@"arrow_up_25x14"] forState:UIControlStateNormal];
-    [upBtn addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [topHoldView addSubview:upBtn];
-    
-    UIButton *downBtn = [[UIButton alloc] init];
-    [downBtn setBackgroundImage:[UIImage imageNamed:@"arrow_down_25x14"] forState:UIControlStateNormal];
-    [downBtn addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
-    [topHoldView addSubview:downBtn];
-    
     _nameLabel = [[UILabel alloc] init];
-    _nameLabel.text = @"审核人：展示";
+//    _nameLabel.text = @"审核人：";
     _nameLabel.font = SYSTEM_FONT_(15);
     _nameLabel.textColor = COLOR_Gray;
     [topHoldView addSubview:_nameLabel];
 
     
     _timeLabel = [[UILabel alloc] init];
-    _timeLabel.text = @"审核时间：2012-12－12";
+//    _timeLabel.text = @"审核时间：";
     _timeLabel.font = SYSTEM_FONT_(15);
     _timeLabel.textAlignment = NSTextAlignmentRight;
     _timeLabel.textColor = COLOR_Gray;
@@ -97,13 +88,13 @@
     textViewHoldView.sd_layout
     .leftEqualToView(topHoldView)
     .topSpaceToView(_titleLabel,0)
-    .widthIs(ScreenWidth - 20)
+    .widthIs(ScreenWidth)
     .heightIs(self.frame.size.height - 30 - 25);
     
     _topTextView.sd_layout
     .leftEqualToView(textViewHoldView).offset(15)
     .topEqualToView(textViewHoldView).offset(5)
-    .rightEqualToView(textViewHoldView).offset(-20)
+    .rightEqualToView(textViewHoldView).offset(-15)
     .bottomEqualToView(textViewHoldView).offset(-5);
     
     topDividerLine1.sd_layout
@@ -118,18 +109,6 @@
     .widthRatioToView(topHoldView,1)
     .heightIs(1);
     
-    upBtn.sd_layout
-    .rightEqualToView(topHoldView).offset(-2)
-    .topEqualToView(textViewHoldView).offset(10)
-    .widthIs(18)
-    .heightIs(10);
-    
-    downBtn.sd_layout
-    .rightEqualToView(upBtn)
-    .bottomEqualToView(textViewHoldView).offset(-10)
-    .widthIs(18)
-    .heightIs(10);
-    
     _nameLabel.sd_layout
     .leftEqualToView(topHoldView).offset(15)
     .topSpaceToView(textViewHoldView,0)
@@ -141,11 +120,6 @@
     .topSpaceToView(textViewHoldView,0)
     .widthIs(ScreenWidth/2)
     .heightIs(25);
-}
-
-- (void)buttonAction:(UIButton *)button
-{
-    
 }
 
 @end

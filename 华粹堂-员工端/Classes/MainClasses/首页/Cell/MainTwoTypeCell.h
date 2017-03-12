@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HomeInfoModel.h"
 
 typedef NS_ENUM(NSInteger, MainTwoTypeCellButton) {
     MainTwoTypeCellButton1      = 0,
@@ -25,7 +26,7 @@ typedef NS_ENUM(NSInteger, MainTwoTypeCellButton) {
 
 @interface MainTwoTypeCell : UITableViewCell
 
-@property (nonatomic, strong) ModelMember *model;
+@property (nonatomic, strong) HomeInfoModel *model;
 
 @property (nonatomic, weak) id <MainTwoTypeCellDelegate> delegate;
 

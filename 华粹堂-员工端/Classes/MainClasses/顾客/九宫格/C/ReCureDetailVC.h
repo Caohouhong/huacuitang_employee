@@ -7,7 +7,10 @@
 //
 
 #import "ChildBaseViewController.h"
+#import "HighTechDetailModel.h"
 
 @interface ReCureDetailVC : ChildBaseViewController
+@property (nonatomic, strong) HighTechDetailModel *model;
+@property (nonatomic, copy) NSString *YongHuId;
 
 @end

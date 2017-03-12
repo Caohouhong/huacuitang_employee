@@ -29,7 +29,7 @@
     
     _callBtn = [[UIButton alloc] init];
     _callBtn.titleLabel.font = SYSTEM_FONT_(14);
-    [_callBtn setImage:[UIImage imageNamed:@"Mytelephone"] forState:UIControlStateNormal];
+    [_callBtn setImage:[UIImage imageNamed:@"yuyue_phone"] forState:UIControlStateNormal];
     [_callBtn setTitle:@"打电话" forState:UIControlStateNormal];
     [_callBtn setTitleColor:COLOR_darkGray forState:UIControlStateNormal];
     _callBtn.tag = ChhYuYueDetailBotViewTypeCall;
@@ -38,7 +38,7 @@
     
     _messageBtn = [[UIButton alloc] init];
     _messageBtn.titleLabel.font = SYSTEM_FONT_(14);
-    [_messageBtn setImage:[UIImage imageNamed:@"Mytelephone"] forState:UIControlStateNormal];
+    [_messageBtn setImage:[UIImage imageNamed:@"yuyue_message"] forState:UIControlStateNormal];
     [_messageBtn setTitle:@"发短信" forState:UIControlStateNormal];
     _messageBtn.tag = ChhYuYueDetailBotViewTypeMessage;
     [_messageBtn setTitleColor:COLOR_darkGray forState:UIControlStateNormal];
@@ -47,7 +47,7 @@
     
     _chatBtn = [[UIButton alloc] init];
     _chatBtn.titleLabel.font = SYSTEM_FONT_(14);
-    [_chatBtn setImage:[UIImage imageNamed:@"Mytelephone"] forState:UIControlStateNormal];
+    [_chatBtn setImage:[UIImage imageNamed:@"yuyue_huanxin"] forState:UIControlStateNormal];
     [_chatBtn setTitle:@"在线聊天" forState:UIControlStateNormal];
     _chatBtn.tag = ChhYuYueDetailBotViewTypeChat;
     [_chatBtn setTitleColor:COLOR_darkGray forState:UIControlStateNormal];
@@ -103,9 +103,12 @@
     .heightIs(15);
 }
 
+//按钮点击
 - (void)buttonAction:(UIButton *)button
 {
-
+    if (self.delegate){
+        [self.delegate bottomBtnClickWithTag:button.tag];
+    }
 }
 
 @end

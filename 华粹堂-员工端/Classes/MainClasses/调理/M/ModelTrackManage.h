@@ -78,10 +78,13 @@
 @property (nonatomic, copy) NSString *uuid;
 /*最后修改时戳*/
 @property (nonatomic, copy) NSString *lastModified;
-
+/*电话*/
 @property (nonatomic ,copy) NSString *customerMobilePhone;
+/*年龄*/
+@property (nonatomic, copy) NSString *age;
 
-
+/*性别 1-女 0-男 */ 
+@property (nonatomic, copy) NSString *sex;
 
 /*冗余*/
 /*客户头像*/
@@ -98,6 +101,11 @@
 @property (nonatomic, copy) NSString *serverTime;
 /*店名*/
 @property (nonatomic, copy) NSString *shopName;
+
+/*专家看诊 1-是*/
+@property (nonatomic, copy) NSString *isExpert;
+
+
 
 
 @end

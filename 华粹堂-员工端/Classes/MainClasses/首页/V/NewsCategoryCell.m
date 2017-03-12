@@ -58,21 +58,14 @@
     }
     return self;
 }
-- (void)awakeFromNib {
-    // Initialization code
-}
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
-}
 -(void)drawView{
     //msg
     imgvImage = [UIImageView createImageViewWithFrame:CGRectMake(hMargin, vMargin, 55, 55)  backgroundColor:nil image:nil];
     imgvImage.layer.cornerRadius = 5.0;
     imgvImage.layer.masksToBounds = YES;
     [self.contentView addSubview:imgvImage];
+    
     imgvRedDot = [UIImageView createImageViewWithFrame:CGRectMake(hMargin+50, vMargin-5, 9, 9)  backgroundColor:nil image:nil];
     imgvRedDot.image = [UIImage imageNamed:@"redDot"];
     [self.contentView addSubview:imgvRedDot];
@@ -123,10 +116,10 @@
         ModelMessage *mod = (ModelMessage *)model;
         
         if (mod.groupType == 0) {
-            imgvImage.image = [UIImage imageNamed:@"ic_mess"];
+            imgvImage.image = [UIImage imageNamed:@"default"];
             lblMessageName.text  = @"系统消息";
         }else if (mod.groupType ==1) {
-            imgvImage.image = [UIImage imageNamed:@"ic_sysmess"];
+            imgvImage.image = [UIImage imageNamed:@"default"];
             lblMessageName.text = @"满意度调查";
         }
 //        else if (mod.groupType ==3) {
@@ -137,7 +130,7 @@
 //            lblMessageName.text = @"社区消息";
 //        }
         else{
-            imgvImage.image = [UIImage imageNamed:@"msg_college"];
+            imgvImage.image = [UIImage imageNamed:@"default"];
             lblMessageName.text = @"公司公告";
         }
    

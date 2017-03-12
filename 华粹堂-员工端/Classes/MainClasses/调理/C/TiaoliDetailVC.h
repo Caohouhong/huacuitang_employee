@@ -7,7 +7,10 @@
 //
 
 #import "ChildBaseViewController.h"
+#import "ModelTrackManage.h"
 
 @interface TiaoliDetailVC : ChildBaseViewController
+
+@property (nonatomic, strong) ModelTrackManage *model;
 
 @end

@@ -7,7 +7,7 @@
 //
 
 #import "ChildBaseViewController.h"
-
+#import "HighTechDetailModel.h"
 typedef NS_ENUM(NSInteger, HighTechViewType) {
     HighTechViewTypeLog       = 0,
     HighTechViewTypeAdvice   =  1,
@@ -15,4 +15,7 @@ typedef NS_ENUM(NSInteger, HighTechViewType) {
 
 @interface HighTechDetailVC : ChildBaseViewController
 @property (nonatomic, assign) HighTechViewType viewType;
+@property (nonatomic, copy) NSString *YongHuId;
+@property (nonatomic, strong) HighTechDetailModel *model;
+
 @end

@@ -9,8 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "TiaoliOnceCellView.h"
 
+typedef void(^TiaoLiLiftTableViewCellBlock)(NSString *, int);
+
 @interface TiaoLiLiftTableViewCell : UITableViewCell
 @property (nonatomic, strong)TiaoliOnceCellView *topPlanCell;
 
+@property (nonatomic, copy) TiaoLiLiftTableViewCellBlock cellBlock;
+
 + (TiaoLiLiftTableViewCell *)cellWithTableView:(UITableView *)tableView;
+
+
 @end

@@ -7,14 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "HomeInfoModel.h"
 
 @interface MainOneTypeCell : UITableViewCell
 
-@property (nonatomic, strong) ModelMember *model;
+@property (nonatomic, strong) HomeInfoModel *model;
 
 + (MainOneTypeCell *)cellWithTableView:(UITableView *)tableView;
-
-
-
 
 @end

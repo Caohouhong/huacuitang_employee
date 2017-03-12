@@ -14,13 +14,27 @@
 @interface TiaoLiLifeView () <UITableViewDelegate, UITableViewDataSource>
 {
     NSArray *titleArray;
+    NSString *scoreStr;
+    int totalScore;
+    int aveScore;
+    int num;
+    
 }
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) UIView *headerView;
 @property (nonatomic, strong) TiaoLiDetailView1 *footerView;
+@property (nonatomic, strong) NSMutableArray *scoreArray;
+@property (nonatomic, strong) UILabel *totalScoreLabel;
 @end
 
 @implementation TiaoLiLifeView
+- (NSMutableArray *)scoreArray
+{
+    if (!_scoreArray){
+        _scoreArray = [NSMutableArray arrayWithObjects:@"无效",@"无效",@"无效",@"无效",@"无效",@"无效",@"无效",@"无效",nil];
+    }
+    return _scoreArray;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -41,6 +55,13 @@
     _footerView = [[TiaoLiDetailView1 alloc] initWithFrame:CGRectMake(0, 0, ScreenWidth, 110)];
     _footerView.titleLabel.text = @"总体评价";
     _footerView.topTextView.placeholder = @"请填写总体评价";
+    WEAK(weakSelf)
+    _footerView.textBlock = ^(NSString *text){
+        weakSelf.pingJiaStr = text;
+        if (weakSelf.pingJiaBlock){
+            weakSelf.pingJiaBlock(weakSelf.pingJiaStr);
+        }
+    };
     
     UITableView *tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -68,13 +89,13 @@
     planCell.leftNameLabel.text = @"家居养生方案";
     [planCell.rightButton setTitle:@"查看" forState:UIControlStateNormal];
     [planCell.rightButton setTitleColor:COLOR_Text_Blue forState:UIControlStateNormal];
+    [planCell.rightButton addTarget:self action:@selector(buttonClick) forControlEvents:UIControlEventTouchUpInside];
     [self.headerView addSubview:planCell];
     
     UIView *totalScoreView = [[UIView alloc] init];
     totalScoreView.backgroundColor = [UIColor whiteColor];
     [self.headerView addSubview:totalScoreView];
     
-    //H 测试  图片不对
     UIButton *totalBtn = [[UIButton alloc] init];
     [totalBtn setImage:[UIImage imageNamed:@"g_mark_15x14"] forState:UIControlStateNormal];
     [totalBtn setTitle:@"总评分：" forState:UIControlStateNormal];
@@ -82,12 +103,11 @@
     [totalBtn setTitleColor:COLOR_Black forState:UIControlStateNormal];
     [totalScoreView addSubview:totalBtn];
     
-    UILabel *totalScoreLabel = [[UILabel alloc] init];
-    totalScoreLabel.text = @"60";
-    totalScoreLabel.font = SYSTEM_FONT_(15);
-    totalScoreLabel.textAlignment = NSTextAlignmentRight;
-    totalScoreLabel.textColor = COLOR_TEXT_ORANGE_RED;
-    [totalScoreView addSubview:totalScoreLabel];
+    _totalScoreLabel = [[UILabel alloc] init];
+    _totalScoreLabel.font = SYSTEM_FONT_(15);
+    _totalScoreLabel.textAlignment = NSTextAlignmentRight;
+    _totalScoreLabel.textColor = COLOR_TEXT_ORANGE_RED;
+    [totalScoreView addSubview:_totalScoreLabel];
     
     UIView *explainView = [[UIView alloc] init];
     explainView.backgroundColor = COLOR_BG_DARK_BLUE;
@@ -148,7 +168,7 @@
     .widthIs(85)
     .heightRatioToView(totalScoreView,1);
     
-    totalScoreLabel.sd_layout
+    _totalScoreLabel.sd_layout
     .rightEqualToView(totalScoreView).offset(-15)
     .centerYEqualToView(totalScoreView)
     .widthIs(85)
@@ -194,7 +214,32 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     TiaoLiLiftTableViewCell *cell = [TiaoLiLiftTableViewCell cellWithTableView:self.tableView];
+    cell.tag = indexPath.row;
     cell.topPlanCell.leftNameLabel.text = titleArray[indexPath.row];
+    WEAK(weakSelf);
+    cell.cellBlock = ^(NSString *textStr, int row){
+        [weakSelf.scoreArray replaceObjectAtIndex:row withObject:textStr];
+        
+        scoreStr = @"";
+        totalScore = 0;
+        num = 0;
+        for (NSString *str in weakSelf.scoreArray){
+           scoreStr =  [scoreStr stringByAppendingString:[NSString stringWithFormat:@"%@,",str]];
+            
+            if (![str isEqualToString:@"无效"]){
+                int score = [str intValue];
+                totalScore = score + totalScore;
+                num++;
+                aveScore = totalScore/num;
+                self.totalScoreLabel.text = [NSString stringWithFormat:@"%i",aveScore];
+            }
+        };
+        
+        if(weakSelf.pingfenBlock){
+            weakSelf.pingfenBlock([scoreStr copy]);
+        };
+    };
+    
     return cell;
 }
 
@@ -203,9 +248,11 @@
     return 90;
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
 
+//查看按钮
+- (void)buttonClick{
+    if(self.block){
+        self.block();
+    }
 }
-
 @end

@@ -6,103 +6,113 @@
 	<dict>
 		<key>AFNetworking.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>0</integer>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>FDFullscreenPopGesture.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
 		</dict>
 		<key>FMDB.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>1</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 		<key>IQKeyboardManager.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>2</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 		<key>MBProgressHUD.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>3</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 		<key>MJExtension.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>4</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 		<key>MJRefresh.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>5</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 		<key>Pods-华粹堂-员工端.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>6</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 		<key>ReactiveCocoa.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>7</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 		<key>SDAutoLayout.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>8</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 		<key>SDCycleScrollView.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>9</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 		<key>SDWebImage-ProgressView.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>11</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 		<key>SDWebImage.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>10</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 		<key>TimesSquare.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>12</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 		<key>UITextView+Placeholder.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>13</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 		<key>WHC_Model.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>14</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 		<key>YTKKeyValueStore.xcscheme</key>
 		<dict>
-			<key>orderHint</key>
-			<integer>15</integer>
+			<key>isShown</key>
+			<false/>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>0B1D3FB99F061C4CBF5487B3B3AF1192</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>0F71FC248875B67F53494C44B17B40EB</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>251BAD17812F7EBF6532EACF66F941C3</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>380F223C0EA9BC64A37FAC126504ED6E</key>
+		<key>28CBCCE3FF7B6BA2C349B387FBDAD0E6</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3A91E6EC6189FD39396207AC8C4EA75B</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>404B429E21EE679AE871AA529E3AB3C9</key>
+		<key>3B3A140B1DA097EBC35904D12A3706DD</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -117,32 +127,17 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>5F31D0BBEF9014019D110B35D835E701</key>
+		<key>5B793435DE5378EB8C6D2FACF5D23B54</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>679C57485977EDE7A80D9442F164463A</key>
+		<key>867139F6FBDBA3918B6A0665DE113D2A</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6E7E1D78C16732D0026311E5909248AE</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>6E812E923C2655E06FA5A3CA2810A5ED</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>B118687FFBADE4146BA86AD1326C37C0</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>BF94BFFAB7DCAF7685A0486733FE7FC4</key>
+		<key>8E99D9E0AE93B973C17AAA70EA9EB22C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -162,7 +157,22 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>ED90CD1D1EEFA0BFAE34B16B63FA5286</key>
+		<key>E89B0F126F0C1AAB0899E1B22929EE9C</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>EC3706EABC3CD77AFE7EC3F76FF6CD70</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F473E36A9B078DDB052C6DE1B3887B33</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>FA557B2D8ECF3AF860789076D3BE3BB7</key>
 		<dict>
 			<key>primary</key>
 			<true/>

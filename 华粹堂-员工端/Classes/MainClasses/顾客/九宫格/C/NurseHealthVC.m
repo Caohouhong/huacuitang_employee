@@ -17,7 +17,8 @@
 #import "TopSelectView.h"
 #import "BackFiveTableViewCell.h"
 #import "BackFourTableViewCell.h"
-
+#import "HCTConnet.h"
+#import "JumpVC.h"
 @interface NurseHealthVC ()<UITableViewDelegate, UITableViewDataSource,NextAndLastDateViewDelegate,TopSelectViewDelegate>
 {
     int dayNum;
@@ -25,13 +26,28 @@
     NSArray *logArray;
     NSArray *lifeArray;
     NSArray *adviceArray;
-    
+    NSString *type;
+    NSArray *basicInformationArr;
+    NSArray *mianInformation;
+    NSArray *indexInformation;
+    NSString *str0;
+    NSString *str1;
+    NSString *str2;
+    NSString *str3;
+    NSString *str4;
+    NSString *str5;
+    NSString *str6;
+    NSString *str7;
+    NSString *str8;
+    NSString *str9;
 }
 @property (nonatomic, weak) UITableView *tableView;
 @property (nonatomic, strong) NextAndLastDateView *topView;
 @property (nonatomic, strong) TopSelectView *topSelectView;
 @property (nonatomic, strong) NSMutableArray *dataArray;
+@property (nonatomic, strong) NSMutableArray *totalArray;
 
+@property (nonatomic, copy) NSString *statc;
 @end
 
 @implementation NurseHealthVC
@@ -39,6 +55,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"调理备忘";
+    type = @"1";
     self.view.backgroundColor = COLOR_BackgroundColor;
     logArray = @[@[@"调理方案"],@[@"调理项目"],@[@"到店理疗配合情况"],@[@"客户综合反馈"],@[@"院长审核意见",@"专家审核意见"]];
     lifeArray = @[@[@"家居养生方案"],@[@"1、药膳食疗"],@[@"2、睡眠作息"],@[@"3、家居理疗"],@[@"4、验方茶疗"],@[@"5、养元功法"],@[@"6、情志调理"],@[@"7、营养疗法"],@[@"8、配合用药建议"],@[@"总体评价"]];
@@ -47,6 +64,7 @@
     self.dataArray = [[NSMutableArray alloc] initWithArray:logArray];
     self.viewType = NurseHealthViewTypeLog;
     [self drawView];
+    [self requestData];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -140,22 +158,102 @@
             cell.rightLabel.text = @"查看";
             cell.rightLabel.textColor = COLOR_Text_Blue;
             
+            
+            
             return cell;
         }else if (indexPath.section == 2){
             BackFiveTableViewCell *cell = [BackFiveTableViewCell cellWithTableView:self.tableView];
+            
+            NSString *s = [self judgeString:self.model.con_home_heal];
+            s = [NSString stringWithFormat:@"得分：%@",s];
+            cell.rightLabel.text = s;
             cell.titleLabel.text = self.dataArray[indexPath.section][indexPath.row];
+            NSString *fuck = self.model.con_home_heal;
+            if ([fuck isEqualToString:@"-100"]) {
+                cell.adviceBtn1.layer.borderColor = COLOR_Text_Blue.CGColor;
+                
+                [cell.adviceBtn1 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                [cell.adviceBtn1 setBackgroundColor:COLOR_BG_DARK_BLUE];
+            }
+            if ([fuck isEqualToString:@"0"]) {
+                cell.adviceBtn2.layer.borderColor = COLOR_Text_Blue.CGColor;
+                
+                [cell.adviceBtn2 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                [cell.adviceBtn2 setBackgroundColor:COLOR_BG_DARK_BLUE];
+            }
+            if ([fuck isEqualToString:@"60"]) {
+                cell.adviceBtn3.layer.borderColor = COLOR_Text_Blue.CGColor;
+                
+                [cell.adviceBtn3 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                [cell.adviceBtn3 setBackgroundColor:COLOR_BG_DARK_BLUE];
+            }
+            if ([fuck isEqualToString:@"100"]) {
+                cell.adviceBtn4.layer.borderColor = COLOR_Text_Blue.CGColor;
+                [cell.adviceBtn4 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                [cell.adviceBtn4 setBackgroundColor:COLOR_BG_DARK_BLUE];
+            }
+//            if (fuck == nil) {
+//                cell.adviceBtn0.layer.borderColor = COLOR_Text_Blue.CGColor;
+//                
+//                [cell.adviceBtn0 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+//                [cell.adviceBtn0 setBackgroundColor:COLOR_BG_DARK_BLUE];
+//            }
             return cell;
             
         }else if (indexPath.section == 3){
             BackFourTableViewCell *cell = [BackFourTableViewCell cellWithTableView:self.tableView];
+            
             cell.titleLabel.text = self.dataArray[indexPath.section][indexPath.row];
+            NSString *fuck = self.model.con_eva;
+            if ([fuck isEqualToString:@"不太满意"]) {
+                cell.adviceBtn0.layer.borderColor = COLOR_Text_Blue.CGColor;
+                [cell.adviceBtn0 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                [cell.adviceBtn0 setBackgroundColor:COLOR_BG_DARK_BLUE];
+            }
+            
+            if ([fuck isEqualToString:@"一般"]) {
+                cell.adviceBtn1.layer.borderColor = COLOR_Text_Blue.CGColor;
+                
+                [cell.adviceBtn1 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                [cell.adviceBtn1 setBackgroundColor:COLOR_BG_DARK_BLUE];
+            }
+            if ([fuck isEqualToString:@"较满意"]) {
+                cell.adviceBtn2.layer.borderColor = COLOR_Text_Blue.CGColor;
+                
+                [cell.adviceBtn2 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                [cell.adviceBtn2 setBackgroundColor:COLOR_BG_DARK_BLUE];
+            }
+            if ([fuck isEqualToString:@"很满意"]) {
+                cell.adviceBtn3.layer.borderColor = COLOR_Text_Blue.CGColor;
+                
+                [cell.adviceBtn3 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                [cell.adviceBtn3 setBackgroundColor:COLOR_BG_DARK_BLUE];
+            }
+
             return cell;
         }else {
             
             AdviceTableViewCell *cell = [AdviceTableViewCell cellWithTableView:self.tableView];
             
             cell.titleLabel.text = self.dataArray[indexPath.section][indexPath.row];
+            DLog(@"!!!!!!!!!!!!!!!!%@",cell.titleLabel.text);
+            if ([cell.titleLabel.text isEqualToString:@"调理项目"]) {
+                cell.topTextView.text = [self judgeString:self.model.dialectics_program];
+                cell.timeLabel.text = [self judgeString:self.model.track_date];
+                
+            }
             
+            if ([cell.titleLabel.text isEqualToString:@"院长审核意见"]) {
+                cell.topTextView.text = [self judgeString:self.model.dean_check_view];
+                cell.timeLabel.text = [self judgeString:self.model.dean_check_date];
+                cell.nameLabel.text = [self judgeString:self.model.dean_name];
+            }
+            if ([cell.titleLabel.text isEqualToString:@"专家审核意见"]) {
+                cell.topTextView.text = [self judgeString:self.model.expert_check_view];
+                cell.timeLabel.text = [self judgeString:self.model.expert_check_date];
+                cell.nameLabel.text = [self judgeString:self.model.expert_name];
+
+            }
             return cell;
             
         }
@@ -165,7 +263,17 @@
         AdviceTableViewCell *cell = [AdviceTableViewCell cellWithTableView:self.tableView];
         
         cell.titleLabel.text = self.dataArray[indexPath.section][indexPath.row];
-        
+        if ([cell.titleLabel.text isEqualToString:@"院长审核意见"]) {
+            cell.topTextView.text = [self judgeString:self.model.dean_check_view];
+            cell.timeLabel.text = [self judgeString:self.model.dean_check_date];
+            cell.nameLabel.text = [self judgeString:self.model.dean_name];
+        }
+        if ([cell.titleLabel.text isEqualToString:@"专家审核意见"]) {
+            cell.topTextView.text = [self judgeString:self.model.expert_check_view];
+            cell.timeLabel.text = [self judgeString:self.model.expert_check_view];
+            cell.nameLabel.text = [self judgeString:self.model.expert_name];
+            
+        }
         return cell;
     }else {
         
@@ -174,6 +282,8 @@
             cell.leftLabel.text = self.dataArray[indexPath.section][indexPath.row];
             cell.rightLabel.text = @"查看";
             cell.rightLabel.textColor = COLOR_Text_Blue;
+            //家居养生
+            
             
             return cell;
         }else if (indexPath.section == self.dataArray.count - 1)
@@ -189,8 +299,232 @@
         }else {
             BackFiveTableViewCell *cell = [BackFiveTableViewCell cellWithTableView:self.tableView];
             cell.titleLabel.text = self.dataArray[indexPath.section][indexPath.row];
-            cell.rightLabel.text = @"得分：80";
-            
+           // cell.rightLabel.text = @"得分：80";
+            DLog(@"gkgkgkgkgkggkgkggkgkgkgkk%@",cell.titleLabel.text);
+            if ([cell.titleLabel.text isEqualToString:@"1、药膳食疗"]) {
+                cell.rightLabel.text = str0;
+                if ([cell.rightLabel.text isEqualToString:@"无效"]) {
+                    cell.adviceBtn0.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn0 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn0 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"-100"]) {
+                    cell.adviceBtn1.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn1 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn1 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"0"]) {
+                    cell.adviceBtn2.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn2 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn2 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"60"]) {
+                    cell.adviceBtn3.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn3 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn3 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"100"]) {
+                    cell.adviceBtn4.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn4 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn4 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+            }
+            if ([cell.titleLabel.text isEqualToString:@"2、睡眠作息"]) {
+                cell.rightLabel.text = str1;
+                if ([cell.rightLabel.text isEqualToString:@"无效"]) {
+                    cell.adviceBtn0.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn0 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn0 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"-100"]) {
+                    cell.adviceBtn1.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn1 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn1 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"0"]) {
+                    cell.adviceBtn2.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn2 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn2 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"60"]) {
+                    cell.adviceBtn3.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn3 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn3 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"100"]) {
+                    cell.adviceBtn4.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn4 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn4 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+            }
+            if ([cell.titleLabel.text isEqualToString:@"3、家居理疗"]) {
+                cell.rightLabel.text = str2;
+                if ([cell.rightLabel.text isEqualToString:@"无效"]) {
+                    cell.adviceBtn0.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn0 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn0 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"-100"]) {
+                    cell.adviceBtn1.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn1 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn1 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"0"]) {
+                    cell.adviceBtn2.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn2 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn2 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"60"]) {
+                    cell.adviceBtn3.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn3 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn3 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"100"]) {
+                    cell.adviceBtn4.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn4 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn4 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+            }
+            if ([cell.titleLabel.text isEqualToString:@"4、验方茶疗"]) {
+                cell.rightLabel.text = str3;
+                if ([cell.rightLabel.text isEqualToString:@"无效"]) {
+                    cell.adviceBtn0.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn0 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn0 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"-100"]) {
+                    cell.adviceBtn1.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn1 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn1 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"0"]) {
+                    cell.adviceBtn2.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn2 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn2 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"60"]) {
+                    cell.adviceBtn3.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn3 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn3 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"100"]) {
+                    cell.adviceBtn4.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn4 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn4 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+            }
+            if ([cell.titleLabel.text isEqualToString:@"5、养元功法"]) {
+                cell.rightLabel.text = str4;
+                if ([cell.rightLabel.text isEqualToString:@"无效"]) {
+                    cell.adviceBtn0.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn0 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn0 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"-100"]) {
+                    cell.adviceBtn1.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn1 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn1 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"0"]) {
+                    cell.adviceBtn2.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn2 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn2 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"60"]) {
+                    cell.adviceBtn3.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn3 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn3 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"100"]) {
+                    cell.adviceBtn4.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn4 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn4 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+            }
+            if ([cell.titleLabel.text isEqualToString:@"6、情志调理"]) {
+                cell.rightLabel.text = str5;
+                if ([cell.rightLabel.text isEqualToString:@"无效"]) {
+                    cell.adviceBtn0.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn0 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn0 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"-100"]) {
+                    cell.adviceBtn1.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn1 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn1 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"0"]) {
+                    cell.adviceBtn2.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn2 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn2 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"60"]) {
+                    cell.adviceBtn3.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn3 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn3 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"100"]) {
+                    cell.adviceBtn4.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn4 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn4 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+            }
+            if ([cell.titleLabel.text isEqualToString:@"7、营养疗法"]) {
+                cell.rightLabel.text = str6;
+                if ([cell.rightLabel.text isEqualToString:@"无效"]) {
+                    cell.adviceBtn0.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn0 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn0 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"-100"]) {
+                    cell.adviceBtn1.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn1 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn1 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"0"]) {
+                    cell.adviceBtn2.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn2 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn2 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"60"]) {
+                    cell.adviceBtn3.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn3 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn3 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"100"]) {
+                    cell.adviceBtn4.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn4 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn4 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+            }
+            if ([cell.titleLabel.text isEqualToString:@"8、配合用药建议"]) {
+                cell.rightLabel.text = str7;
+                if ([cell.rightLabel.text isEqualToString:@"无效"]) {
+                    cell.adviceBtn0.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn0 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn0 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"-100"]) {
+                    cell.adviceBtn1.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn1 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn1 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"0"]) {
+                    cell.adviceBtn2.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn2 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn2 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"60"]) {
+                    cell.adviceBtn3.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn3 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn3 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+                if ([cell.rightLabel.text isEqualToString:@"100"]) {
+                    cell.adviceBtn4.layer.borderColor = COLOR_Text_Blue.CGColor;
+                    [cell.adviceBtn4 setTitleColor:COLOR_TEXT_DARK_BLUE forState:UIControlStateNormal];
+                    [cell.adviceBtn4 setBackgroundColor:COLOR_BG_DARK_BLUE];
+                }
+            }
             return cell;
         }
     }
@@ -259,7 +593,7 @@
               [headerView addSubview:totalBtn];
               
               UILabel *totalScoreLabel = [[UILabel alloc] init];
-              totalScoreLabel.text = @"60";
+              totalScoreLabel.text = str8;
               totalScoreLabel.font = SYSTEM_FONT_(15);
               totalScoreLabel.textAlignment = NSTextAlignmentRight;
               totalScoreLabel.textColor = COLOR_TEXT_ORANGE_RED;
@@ -366,11 +700,13 @@
         case NextAndLastDateViewButtonTypeLast:
         {
             dayNum--;
+            type = @"1";
         }
             break;
         case NextAndLastDateViewButtonTypeNext:
         {
             dayNum++;
+            type = @"2";
         }
             break;
     }
@@ -380,8 +716,8 @@
     
     mBookTime = [self changeDateStringStyleWith:dateString];
     //show hud
-    //    [LCProgressHUD showLoading:@"正在加载..."];
-    //    [self requestData];
+        [LCProgressHUD showLoading:@"正在加载..."];
+        [self requestData];
 }
 
 //改变时间格式
@@ -400,6 +736,7 @@
 - (void)topButtonClickWithTag:(TopSelectViewType)tag
 {
     [self.dataArray removeAllObjects];
+    [self.totalArray removeAllObjects];
     [self.topSelectView.leftButton setTitleColor:COLOR_darkGray forState:UIControlStateNormal];
     [self.topSelectView.rightButton setTitleColor:COLOR_darkGray forState:UIControlStateNormal];
     [self.topSelectView.centerButton setTitleColor:COLOR_darkGray forState:UIControlStateNormal];
@@ -408,17 +745,24 @@
         case TopSelectViewTypeLeft:
             [self.topSelectView.leftButton setTitleColor:COLOR_Text_Blue forState:UIControlStateNormal];
             [self.dataArray addObjectsFromArray:logArray];
+            [self.totalArray addObjectsFromArray:basicInformationArr];
             self.viewType = NurseHealthViewTypeLog;
+            self.statc = @"1";
             break;
         case TopSelectViewTypeCenter:
             [self.topSelectView.centerButton setTitleColor:COLOR_Text_Blue forState:UIControlStateNormal];
             [self.dataArray addObjectsFromArray:lifeArray];
             self.viewType = NurseHealthViewTypeLife;
+            self.statc = @"2";
+
             break;
         case TopSelectViewTypeRight:
             [self.topSelectView.rightButton setTitleColor:COLOR_Text_Blue forState:UIControlStateNormal];
             [self.dataArray addObjectsFromArray:adviceArray];
+            [self.totalArray addObjectsFromArray:mianInformation];
             self.viewType = NurseHealthViewTypeAdvice;
+            self.statc = @"3";
+
             break;
         default:
             break;
@@ -426,5 +770,88 @@
     
     [self.tableView reloadData];
 }
+#pragma mark - ====网络====
+- (void)requestData
+{
+    [LCProgressHUD showLoading:@"正在加载..."];
+    
+    NSMutableDictionary *params = [[NSMutableDictionary alloc]init];
+    [params setValue:self.YongHuId forKey:@"c_id"];
+    [params setValue:mBookTime forKey:@"dataTime"];
+    [params setValue:type forKey:@"type"];
+    
+    [HCTConnet getNurseHealthVC:params success:^(id responseObject) {
+     
+        self.model = [NurseHealthModel mj_objectWithKeyValues:responseObject];
+        basicInformationArr = @[@[[self judgeString:self.model.d_program_detail]],@[[self judgeString:self.model.dialectics_program]],@[[self judgeString:self.model.con_home_heal]],@[[self judgeString:self.model.con_eva]],@[[self judgeString:self.model.dean_check_view]],@[[self judgeString:self.model.expert_check_view]]];
 
+        indexInformation = @[@[[self judgeString:self.model.dean_check_view]],@[[self judgeString:self.model.expert_check_view]]];
+        
+        
+        self.totalArray = [[NSMutableArray alloc]initWithArray:basicInformationArr];
+        
+        str8 = self.model.con_home_heal_value_total;
+        str9 = self.model.total_string;
+        NSArray *totalArr = [str9 componentsSeparatedByString:@","];
+        str0 = totalArr[0];
+        str1 = totalArr[1];
+        str2 = totalArr[2];
+        str3 = totalArr[3];
+        str4 = totalArr[4];
+        str5 = totalArr[5];
+        str6 = totalArr[6];
+        str7 = totalArr[7];
+       
+
+        DLog(@")_____%@",totalArr);
+        [self.tableView reloadData];
+    } successBackfailError:^(id responseObject) {
+        
+    } failure:^(NSURLSessionDataTask *operation, NSError *error) {
+        
+    }];
+    
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (self.viewType == NurseHealthViewTypeLog){
+        
+        if (indexPath.section == 0){
+            JumpVC *vc = [[JumpVC alloc] init];
+            vc.titlel =@"调理方案";
+            vc.content =[self judgeString:self.model.d_program_detail];
+            vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
+            
+        }
+        
+    }
+    
+    if (self.viewType == NurseHealthViewTypeLife){
+        
+        if (indexPath.section == 0){
+            JumpVC *vc = [[JumpVC alloc] init];
+            vc.titlel =@"家居养生方案";
+            vc.content =[self judgeString:self.model.home_health_req];
+            vc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vc animated:YES];
+            
+        }
+        
+    }
+    
+    
+}
+
+-(NSString *)jubstring:(id)str{
+    if ([str isEqualToString:@"无效"]) {
+        str = @"-1";
+    }
+    return str;
+    
+}
+- (NSString *)judgeString:(id)str{
+    NSString *result = str?str:@"";
+    return result;
+}
 @end
